@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Ticker from './components/Ticker'
 import LandingPage from './components/LandingPage'
@@ -26,7 +26,7 @@ const Fallback = () => (
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       {/* Global visual effects */}
       <div className="scanline-overlay" />
       <div className="scanline-beam" />
@@ -55,6 +55,6 @@ export default function App() {
       </Suspense>
 
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   )
 }
