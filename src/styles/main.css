@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #080b11;
+    --bg-secondary: #0d1117;
+    --bg-card: #111827;
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --border: #21262d;
+    --accent: #F7931A;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Mono', monospace;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .scanline-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 40;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+  }
+
+  .scanline-beam {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    pointer-events: none;
+    z-index: 39;
+    background: linear-gradient(
+      transparent,
+      rgba(247, 147, 26, 0.03),
+      transparent
+    );
+    animation: scanline 8s linear infinite;
+  }
+
+  .glitch-text {
+    animation: glitch 3s infinite;
+  }
+
+  .glow-orange {
+    text-shadow: 0 0 20px rgba(247, 147, 26, 0.8), 0 0 40px rgba(247, 147, 26, 0.4);
+  }
+
+  .glow-green {
+    text-shadow: 0 0 20px rgba(0, 255, 148, 0.8), 0 0 40px rgba(0, 255, 148, 0.4);
+  }
+
+  .card-dark {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #F7931A, #e07d0f);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(247, 147, 26, 0.6);
+  }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-120px); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes glitch {
+  /* Rest state — NO text-shadow so orange CRYPTO and white ABS both appear clean */
+  0%, 85%, 100% {
+    transform: translate(0);
+    clip-path: none;
+  }
+  /* Brief glitch bursts */
+  87% {
+    text-shadow: -3px 0 #627EEA, 3px 0 #FF3366;
+    transform: translate(-2px, 0);
+  }
+  89% {
+    text-shadow: 3px 0 #FF3366, -3px 0 #00FF94;
+    transform: translate(2px, 0);
+  }
+  91% {
+    text-shadow: -2px 0 #627EEA, 2px 0 #F7931A;
+    transform: translate(0, 1px);
+  }
+  93% {
+    text-shadow: 2px 0 #00FF94, -2px 0 #FF3366;
+    transform: translate(0, -1px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(247, 147, 26, 0.4), 0 0 40px rgba(247, 147, 26, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(247, 147, 26, 0.8), 0 0 80px rgba(247, 147, 26, 0.4); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px);  opacity: 0.35; }
+  50%       { transform: translateY(-18px); opacity: 0.55; }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: '_';
+  animation: blink 1s step-end infinite;
+  color: #F7931A;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  animation: float var(--duration, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  filter: drop-shadow(0 0 8px rgba(247,147,26,0.35));
+}
