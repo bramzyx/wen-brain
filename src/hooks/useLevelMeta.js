@@ -8,6 +8,6 @@ export function useLevelMeta(level) {
       tag.setAttribute('property', 'og:image')
       document.head.appendChild(tag)
     }
-    tag.setAttribute('content', `/banners/banner_level${level}.png`)
+    tag.setAttribute('content', `./banners/banner_level${level}.png`)
   }, [level])
 }

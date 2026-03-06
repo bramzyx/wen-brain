@@ -8,7 +8,7 @@ const sfxCache = {}
 function getSfx(name) {
   if (!sfxCache[name]) {
     sfxCache[name] = new Howl({
-      src: [`/sounds/${name}.mp3`],
+      src: [`./sounds/${name}.mp3`],
       volume: 0.65,
       onloaderror: () => {},
     })
@@ -47,7 +47,7 @@ export function useSound() {
 
       bgTrack = track
       bgHowl = new Howl({
-        src: [`/sounds/${track}.mp3`],
+        src: [`./sounds/${track}.mp3`],
         volume: 0,
         loop: true,
         onloaderror: () => { bgHowl = null; bgTrack = null },

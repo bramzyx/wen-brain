@@ -633,7 +633,7 @@ export default function Level3Page() {
             Ethereum launched in July 2015. Within a few years it became a trillion-dollar network.
           </p>
 
-          <LevelImage src="/images/vitalik_young.gif" alt="Vitalik Buterin young genius" />
+          <LevelImage src="./images/vitalik_young.gif" alt="Vitalik Buterin young genius" />
 
           <MemeQuote>"While you were partying at university, Vitalik was building the internet of money."</MemeQuote>
         </SectionCard>
@@ -749,7 +749,7 @@ export default function Level3Page() {
             ))}
           </div>
 
-          <LevelImage src="/images/dao_hack.gif" alt="The DAO hack 2016" />
+          <LevelImage src="./images/dao_hack.gif" alt="The DAO hack 2016" />
 
           <MemeQuote>"The hack that created two Ethereums. Only in crypto, ser."</MemeQuote>
         </SectionCard>
@@ -851,7 +851,7 @@ export default function Level3Page() {
             </p>
           </div>
 
-          <LevelImage src="/images/eth_ecosystem.gif" alt="Ethereum ecosystem growing" />
+          <LevelImage src="./images/eth_ecosystem.gif" alt="Ethereum ecosystem growing" />
 
           <MemeQuote>"Vitalik built Ethereum at 19. What have you done today, ser?"</MemeQuote>
         </SectionCard>
