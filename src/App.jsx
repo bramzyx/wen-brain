@@ -32,6 +32,8 @@ function OAuthHandler() {
     handleXCallback(code, state).then((user) => {
       console.log('[WenBrain] OAuth result:', user)
       if (user) {
+        // Save directly to localStorage so it's readable before Zustand rehydrates
+        try { localStorage.setItem('xUser', JSON.stringify(user)) } catch {}
         setXUser(user)
         setPlayerName(user.username)
         submitToLeaderboard(user.username)

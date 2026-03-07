@@ -143,6 +143,10 @@ function LoginModal({ onClose }) {
   )
 }
 
+function getSavedXUser() {
+  try { return JSON.parse(localStorage.getItem('xUser')) } catch { return null }
+}
+
 export default function LandingPage() {
   const { playerName, totalXP, fakeStats, xUser } = useGameStore()
   const { play } = useSound()
@@ -150,9 +154,17 @@ export default function LandingPage() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
 
+  // Zustand may not have rehydrated yet on first render — check localStorage directly
+  const isLoggedIn = !!(xUser || getSavedXUser())
+
+  // Auto-close modal if OAuth completes while modal is open
+  useEffect(() => {
+    if (xUser && showLoginModal) setShowLoginModal(false)
+  }, [xUser, showLoginModal])
+
   const handleStartClick = () => {
     play('click')
-    if (xUser) {
+    if (isLoggedIn) {
       navigate('/game')
     } else {
       setShowLoginModal(true)
@@ -317,13 +329,13 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             viewport={{ once: true }}
           >
-            {xUser && (
+            {isLoggedIn && (
               <div className="card-dark p-4">
                 <div className="font-mono text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>
                   GM, SER
                 </div>
                 <div className="font-syne font-bold text-lg" style={{ color: '#F7931A' }}>
-                  @{xUser.username}
+                  @{(xUser || getSavedXUser()).username}
                 </div>
                 <div className="font-mono text-xs mt-1" style={{ color: '#00FF94' }}>
                   {totalXP.toLocaleString()} XP total
@@ -363,7 +375,7 @@ export default function LandingPage() {
             className="btn-primary text-lg px-12 py-4"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            {xUser ? 'Continue Journey 🚀' : "Start Learning — It's Free 🔥"}
+            {isLoggedIn ? 'Continue Journey 🚀' : "Start Learning — It's Free 🔥"}
           </button>
           <p className="font-mono text-xs mt-3 opacity-40" style={{ color: 'var(--text-secondary)' }}>
             *still not financial advice

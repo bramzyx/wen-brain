@@ -15,6 +15,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     play('click')
+    try { localStorage.removeItem('xUser') } catch {}
     clearXUser()
     setPlayerName('')
   }
