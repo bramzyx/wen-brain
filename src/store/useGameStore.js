@@ -102,8 +102,8 @@ export const useGameStore = create(
           const payload = {
             username: user.username,
             profile_picture: user.profilePicture || user.avatarUrl || null,
-            xp: state.xp || state.totalXP || 0,
-            levels_completed: state.levelsCompleted || 0,
+            xp: state.totalXP || 0,
+            levels_completed: state.levels ? state.levels.filter((l) => l.completed).length : 0,
           }
           const res = await fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
