@@ -36,6 +36,7 @@ exports.handler = async (event) => {
 
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body);
+      console.log('[Leaderboard] Received:', JSON.stringify(body));
       const levelsCompletedToSave = body.levels_completed || body.levelsCompleted || 0;
       const profilePicToSave = body.profile_picture || body.profilePicture || body.avatarUrl || null;
       const usernameToSave = body.username;
