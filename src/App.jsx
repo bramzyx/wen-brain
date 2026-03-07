@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Ticker from './components/Ticker'
@@ -11,16 +11,34 @@ import { useGameStore } from './store/useGameStore'
 // Handles the /auth/callback hash route after X OAuth redirect
 function AuthCallback() {
   const navigate = useNavigate()
-  const { setXUser, setPlayerName, submitToLeaderboard } = useGameStore()
+  const { setXUser, setPlayerName, submitToLeaderboard, xUser } = useGameStore()
+  const ran = useRef(false)
 
   useEffect(() => {
+    // Already authenticated — skip the exchange entirely
+    if (xUser) {
+      navigate('/', { replace: true })
+      return
+    }
+
+    // Prevent double-run from React StrictMode or re-renders
+    if (ran.current) return
+    ran.current = true
+
+    // Parse code + state from the hash before clearing it
     const hash = window.location.hash // '#/auth/callback?code=...&state=...'
     const queryPart = hash.split('?')[1] || ''
     const params = new URLSearchParams(queryPart)
     const code = params.get('code')
     const state = params.get('state')
 
-    if (!code) { navigate('/'); return }
+    // Immediately strip OAuth params from the URL so a refresh can't re-trigger
+    window.history.replaceState(null, '', window.location.pathname)
+
+    if (!code) {
+      navigate('/', { replace: true })
+      return
+    }
 
     handleXCallback(code, state).then((user) => {
       if (user) {
@@ -28,7 +46,7 @@ function AuthCallback() {
         setPlayerName(user.username)
         submitToLeaderboard(user.username)
       }
-      navigate('/game')
+      navigate('/', { replace: true })
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
