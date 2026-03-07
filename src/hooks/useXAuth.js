@@ -1,6 +1,6 @@
 // X OAuth 2.0 PKCE — public client (no secret needed)
 // Replace X_CLIENT_ID with your actual X App Client ID
-const X_CLIENT_ID = 'YOUR_X_CLIENT_ID'
+const X_CLIENT_ID = 'PASTE_YOUR_CLIENT_ID_HERE'
 const X_REDIRECT_URI = 'https://wenbrain.com/auth/callback'
 
 function generateVerifier() {
