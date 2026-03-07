@@ -73,6 +73,7 @@ export async function handleXCallback(code, returnedState) {
     const { data } = await userRes.json()
 
     return {
+      xId: data.id,
       username: data.username,
       displayName: data.name,
       // Replace _normal with _bigger for a slightly larger avatar

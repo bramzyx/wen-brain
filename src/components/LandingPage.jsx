@@ -77,35 +77,13 @@ function TypewriterSubtitle() {
 }
 
 // Portal modal — always above everything, z-index 9999
-function NameModal({ onStart, onClose, initialName = '' }) {
-  const [guestMode, setGuestMode] = useState(!!initialName) // returning users go straight to guest/name edit
-  const [name, setName] = useState(initialName)
-  const { setPlayerName, submitToLeaderboard } = useGameStore()
+function LoginModal({ onClose }) {
   const { play } = useSound()
-  const inputRef = useRef(null)
-
-  useEffect(() => {
-    if (guestMode) {
-      const t = setTimeout(() => inputRef.current?.focus(), 50)
-      return () => clearTimeout(t)
-    }
-  }, [guestMode])
-
-  const handleStart = () => {
-    const trimmed = name.trim()
-    if (!trimmed) return
-    play('click')
-    setPlayerName(trimmed)
-    submitToLeaderboard(trimmed)
-    onStart()
-  }
 
   const handleXLogin = async () => {
     play('click')
     try { await startXLogin() } catch (_) {}
   }
-
-  const isReturning = !!initialName
 
   return createPortal(
     <motion.div
@@ -123,116 +101,37 @@ function NameModal({ onStart, onClose, initialName = '' }) {
         transition={{ delay: 0.05, type: 'spring', damping: 20 }}
       >
         {/* Close button */}
-        {onClose && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded transition-opacity hover:opacity-70"
-            style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1 }}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        )}
-        {!guestMode ? (
-          /* ── X Login view ── */
-          <>
-            <div className="text-4xl mb-4">₿</div>
-            <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
-              GM, ser. Who are you?
-            </h2>
-            <p className="font-mono text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
-              Your name goes on the leaderboard. Choose wisely. IYKYK.
-            </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded transition-opacity hover:opacity-70"
+          style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1 }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
 
-            {/* Login with X — primary */}
-            <button
-              type="button"
-              onClick={handleXLogin}
-              className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base mb-4 transition-all hover:opacity-90"
-              style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
-            >
-              <XIcon size={16} />
-              Login with X
-            </button>
+        <div className="text-4xl mb-4">₿</div>
+        <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
+          GM, ser. Who are you?
+        </h2>
+        <p className="font-mono text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
+          Login with X to join the leaderboard. Keep it real. IYKYK.
+        </p>
 
-            {/* Divider */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-              <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>or</span>
-              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-            </div>
+        <button
+          type="button"
+          onClick={handleXLogin}
+          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base transition-all hover:opacity-90"
+          style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+        >
+          <XIcon size={16} />
+          Login with X
+        </button>
 
-            {/* Guest option */}
-            <button
-              type="button"
-              onClick={() => setGuestMode(true)}
-              className="w-full py-3 rounded-lg font-mono text-sm transition-all hover:opacity-80"
-              style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
-            >
-              Continue as Guest 👻
-            </button>
-
-            <p className="font-mono text-xs mt-4" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
-              *not financial advice
-            </p>
-          </>
-        ) : (
-          /* ── Guest / returning user name input ── */
-          <>
-            <div className="text-4xl mb-4">{isReturning ? '👋' : '👻'}</div>
-            <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
-              {isReturning ? 'Welcome back, ser' : 'Pick Your Alias'}
-            </h2>
-            <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-              {isReturning
-                ? <>Your name is on the leaderboard.<br />Edit it and LFG.</>
-                : 'Your name goes on the leaderboard. No pressure.'}
-            </p>
-            <input
-              ref={inputRef}
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleStart()}
-              placeholder="SatoshiGhost, DegenerateKing..."
-              maxLength={24}
-              className="w-full px-4 py-3 rounded-lg font-mono text-sm mb-4"
-              style={{
-                background: '#1a2030',
-                border: '1px solid #334155',
-                color: '#f0f6fc',
-                outline: 'none',
-                boxShadow: 'none',
-              }}
-            />
-            <button
-              type="button"
-              onClick={handleStart}
-              className="btn-primary w-full text-lg mb-3"
-              style={{
-                fontFamily: 'Syne, sans-serif',
-                opacity: name.trim() ? 1 : 0.45,
-                cursor: name.trim() ? 'pointer' : 'not-allowed',
-              }}
-            >
-              LFG 🚀
-            </button>
-            {!isReturning && (
-              <button
-                type="button"
-                onClick={() => setGuestMode(false)}
-                className="font-mono text-xs transition-opacity hover:opacity-80"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                ← back to Login with X
-              </button>
-            )}
-            <p className="font-mono text-xs mt-3" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
-              *not financial advice
-            </p>
-          </>
-        )}
+        <p className="font-mono text-xs mt-6" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+          *not financial advice
+        </p>
       </motion.div>
     </motion.div>,
     document.body
@@ -240,21 +139,19 @@ function NameModal({ onStart, onClose, initialName = '' }) {
 }
 
 export default function LandingPage() {
-  const { playerName, totalXP, fakeStats } = useGameStore()
+  const { playerName, totalXP, fakeStats, xUser } = useGameStore()
   const { play } = useSound()
   const navigate = useNavigate()
-  const [showNameModal, setShowNameModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
 
   const handleStartClick = () => {
     play('click')
-    setShowNameModal(true)
-  }
-
-  // After LFG is confirmed: close modal → navigate to game screen
-  const handleNameSubmit = () => {
-    setShowNameModal(false)
-    navigate('/game')
+    if (xUser) {
+      navigate('/game')
+    } else {
+      setShowLoginModal(true)
+    }
   }
 
   return (
@@ -415,13 +312,13 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             viewport={{ once: true }}
           >
-            {playerName && (
+            {xUser && (
               <div className="card-dark p-4">
                 <div className="font-mono text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>
                   GM, SER
                 </div>
                 <div className="font-syne font-bold text-lg" style={{ color: '#F7931A' }}>
-                  {playerName}
+                  @{xUser.username}
                 </div>
                 <div className="font-mono text-xs mt-1" style={{ color: '#00FF94' }}>
                   {totalXP.toLocaleString()} XP total
@@ -461,7 +358,7 @@ export default function LandingPage() {
             className="btn-primary text-lg px-12 py-4"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            {playerName ? 'Continue Journey 🚀' : "Start Learning — It's Free 🔥"}
+            {xUser ? 'Continue Journey 🚀' : "Start Learning — It's Free 🔥"}
           </button>
           <p className="font-mono text-xs mt-3 opacity-40" style={{ color: 'var(--text-secondary)' }}>
             *still not financial advice
@@ -490,14 +387,10 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Name modal — portal, always on top */}
+      {/* Login modal — portal, always on top */}
       <AnimatePresence>
-        {showNameModal && (
-          <NameModal
-            onStart={handleNameSubmit}
-            onClose={() => setShowNameModal(false)}
-            initialName={playerName}
-          />
+        {showLoginModal && (
+          <LoginModal onClose={() => setShowLoginModal(false)} />
         )}
       </AnimatePresence>
     </div>

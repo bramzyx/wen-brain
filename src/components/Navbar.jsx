@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 import { useSound } from '../hooks/useSound'
-import { startXLogin } from '../hooks/useXAuth'
 
 const XIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -11,12 +10,13 @@ const XIcon = () => (
 )
 
 export default function Navbar() {
-  const { totalXP, soundEnabled, toggleSound, xUser, playerName } = useGameStore()
+  const { totalXP, soundEnabled, toggleSound, xUser, clearXUser, setPlayerName } = useGameStore()
   const { play } = useSound()
 
-  const handleXLogin = async () => {
+  const handleLogout = () => {
     play('click')
-    try { await startXLogin() } catch (_) {}
+    clearXUser()
+    setPlayerName('')
   }
 
   const xpToNext = 1000
@@ -54,38 +54,38 @@ export default function Navbar() {
         {/* Right side: user + sound */}
         <div className="flex items-center gap-2">
           {/* X logged-in user */}
-          {xUser ? (
-            <div className="hidden sm:flex items-center gap-2 px-2 py-1 rounded"
-              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-              {xUser.avatarUrl ? (
-                <img
-                  src={xUser.avatarUrl}
-                  alt={xUser.username}
-                  className="w-6 h-6 rounded-full"
-                  style={{ objectFit: 'cover' }}
-                />
-              ) : (
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                  style={{ background: '#1DA1F2', color: '#fff' }}>
-                  {xUser.username[0].toUpperCase()}
-                </div>
-              )}
-              <span className="font-mono text-xs" style={{ color: '#00FF94' }}>
-                @{xUser.username}
-              </span>
+          {xUser && (
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="flex items-center gap-2 px-2 py-1 rounded"
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                {xUser.avatarUrl ? (
+                  <img
+                    src={xUser.avatarUrl}
+                    alt={xUser.username}
+                    className="w-6 h-6 rounded-full"
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                    style={{ background: '#1DA1F2', color: '#fff' }}>
+                    {xUser.username[0].toUpperCase()}
+                  </div>
+                )}
+                <span className="font-mono text-xs" style={{ color: '#00FF94' }}>
+                  @{xUser.username}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="font-mono text-xs px-2 py-1 rounded transition-opacity hover:opacity-70"
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                title="Sign out"
+              >
+                Sign out
+              </button>
             </div>
-          ) : playerName ? (
-            /* Guest user: offer Login with X */
-            <button
-              type="button"
-              onClick={handleXLogin}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs transition-all hover:opacity-80"
-              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-primary)' }}
-            >
-              <XIcon />
-              Login with X
-            </button>
-          ) : null}
+          )}
 
           {/* Sound toggle */}
           <button

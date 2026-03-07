@@ -70,6 +70,7 @@ export const useGameStore = create(
 
         const entry = {
           name: playerName,
+          xId: xUser?.xId ?? null,
           xp: totalXP,
           avatarUrl: xUser?.avatarUrl ?? null,
           isXUser: !!xUser,
@@ -77,7 +78,10 @@ export const useGameStore = create(
           wagmiBadges,
         }
 
-        const existing = leaderboard.findIndex((e) => e.name === playerName)
+        // Deduplicate by xId for X users, fallback to name for guests
+        const existing = leaderboard.findIndex((e) =>
+          xUser?.xId ? e.xId === xUser.xId : e.name === playerName
+        )
         let updated = [...leaderboard]
 
         if (existing >= 0) {
