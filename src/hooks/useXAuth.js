@@ -1,7 +1,7 @@
 // X OAuth 2.0 PKCE — public client (no secret needed)
 const X_CLIENT_ID = 'UXFXa2xWZXFkUVRvM1pYSWlrTkY6MTpjaQ'
 // Hash-based redirect so the React SPA handles it client-side (no server needed)
-const X_REDIRECT_URI = 'https://wenbrain.com/#/auth/callback'
+const X_REDIRECT_URI = 'https://wenbrain.com/auth/callback'
 
 function generateVerifier() {
   const arr = new Uint8Array(32)
