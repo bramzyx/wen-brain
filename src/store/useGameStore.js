@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+const _inFlightLevels = new Set()
+
 const LEVEL_COUNT = 10
 
 const defaultLevels = Array.from({ length: LEVEL_COUNT }, (_, i) => ({
@@ -59,7 +61,8 @@ export const useGameStore = create(
         console.log('[WenBrain] completeLevel called:', levelId, score, xpEarned)
         const { totalXP, levels } = get()
         const alreadyCompleted = levels.find((l) => l.id === levelId)?.completed
-        if (alreadyCompleted) return
+        if (alreadyCompleted || _inFlightLevels.has(levelId)) return
+        _inFlightLevels.add(levelId)
 
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
@@ -92,8 +95,8 @@ export const useGameStore = create(
           }),
         })
           .then((r) => r.json())
-          .then((d) => console.log('[WenBrain] Leaderboard saved:', d))
-          .catch((e) => console.error('[WenBrain] Error:', e))
+          .then((d) => { console.log('[WenBrain] Leaderboard saved:', d); _inFlightLevels.delete(levelId) })
+          .catch((e) => { console.error('[WenBrain] Error:', e); _inFlightLevels.delete(levelId) })
       },
 
       submitScoreToSupabase: async () => {

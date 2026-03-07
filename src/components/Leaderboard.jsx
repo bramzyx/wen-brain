@@ -10,19 +10,18 @@ const LEADERBOARD_URL = 'https://tubular-dieffenbachia-b254bc.netlify.app/.netli
 function Avatar({ entry, size = 28 }) {
   const src = entry.profile_picture || entry.profilePicture || entry.avatarUrl
   const initial = ((entry.username || entry.name || '?')[0]).toUpperCase()
+  const [imgFailed, setImgFailed] = useState(false)
 
-  if (src) {
+  useEffect(() => { setImgFailed(false) }, [src])
+
+  if (src && !imgFailed) {
     return (
       <img
         src={src}
         alt={entry.username || entry.name || '?'}
         referrerPolicy="no-referrer"
-        crossOrigin="anonymous"
         style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
-        onError={(e) => {
-          e.target.style.display = 'none'
-          e.target.nextSibling.style.display = 'flex'
-        }}
+        onError={() => setImgFailed(true)}
       />
     )
   }
@@ -72,6 +71,8 @@ export default function Leaderboard({ limit = 3, full = false }) {
 
   const displayLimit = full ? 50 : limit
   const board = data.slice(0, displayLimit)
+
+  const getLevelsCompleted = (entry) => Number(entry.levels_completed ?? entry.levelsCompleted ?? 0) || 0
 
   // ── Full leaderboard (Hall of Based section) ──────────────────────────────
   if (full) {
@@ -136,7 +137,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
                         </span>
                       </div>
                       <div className="font-mono text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-                        {entry.levels_completed || 0}/10 levels completed
+                        {getLevelsCompleted(entry)}/10 levels completed
                       </div>
                     </div>
 
