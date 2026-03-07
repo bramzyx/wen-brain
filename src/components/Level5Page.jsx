@@ -494,7 +494,10 @@ export default function Level5Page() {
     }
   }
 
-  const handleNext = () => navigate('/game')
+  const handleNext = () => {
+    window.scrollTo(0, 0)
+    navigate('/game')
+  }
 
   const handleRetry = () => {
     setAttempt((a) => a + 1)
@@ -504,11 +507,15 @@ export default function Level5Page() {
     setQuizPhase('quiz')
   }
 
-  const handleSkip = () => navigate('/game')
+  const handleSkip = () => {
+    window.scrollTo(0, 0)
+    navigate('/game')
+  }
 
   const handleContinueAnyway = () => {
     completeLevel(5, 0, 0)
     submitToLeaderboard(playerName)
+    window.scrollTo(0, 0)
     navigate('/game')
   }
 

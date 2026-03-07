@@ -505,7 +505,10 @@ export default function Level8Page() {
     }
   }
 
-  const handleNext = () => navigate('/game')
+  const handleNext = () => {
+    window.scrollTo(0, 0)
+    navigate('/game')
+  }
 
   const handleRetry = () => {
     setAttempt((a) => a + 1)
@@ -515,11 +518,15 @@ export default function Level8Page() {
     setQuizPhase('quiz')
   }
 
-  const handleSkip = () => navigate('/game')
+  const handleSkip = () => {
+    window.scrollTo(0, 0)
+    navigate('/game')
+  }
 
   const handleContinueAnyway = () => {
     completeLevel(8, 0, 0)
     submitToLeaderboard(playerName)
+    window.scrollTo(0, 0)
     navigate('/game')
   }
 
