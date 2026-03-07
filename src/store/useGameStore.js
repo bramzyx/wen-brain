@@ -64,9 +64,11 @@ export const useGameStore = create(
 
         // Fire-and-forget sync to global leaderboard (X users only)
         const { xUser, totalXP, levels } = get()
+        console.log('[WenBrain] xUser:', xUser)
         if (xUser?.username) {
           const newXP = totalXP + xpEarned + bonusXP
           const levels_completed = levels.filter((l) => l.completed || l.id === levelId).length
+          console.log('[WenBrain] Submitting to leaderboard:', { username: xUser.username, xp: newXP, levels_completed })
           fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -76,15 +78,23 @@ export const useGameStore = create(
               xp: newXP,
               levels_completed,
             }),
-          }).catch(() => {}) // silently ignore network errors
+          })
+            .then(async (res) => {
+              console.log('[WenBrain] Leaderboard response:', await res.json())
+            })
+            .catch((error) => {
+              console.error('[WenBrain] Leaderboard error:', error)
+            })
         }
       },
 
       // Sync current localStorage XP to Supabase — call on app load
       syncToLeaderboard: () => {
         const { xUser, totalXP, levels } = get()
+        console.log('[WenBrain] xUser:', xUser)
         if (!xUser?.username) return
         const levels_completed = levels.filter((l) => l.completed).length
+        console.log('[WenBrain] Submitting to leaderboard:', { username: xUser.username, xp: totalXP, levels_completed })
         fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -94,7 +104,13 @@ export const useGameStore = create(
             xp: totalXP,
             levels_completed,
           }),
-        }).catch(() => {})
+        })
+          .then(async (res) => {
+            console.log('[WenBrain] Leaderboard response:', await res.json())
+          })
+          .catch((error) => {
+            console.error('[WenBrain] Leaderboard error:', error)
+          })
       },
 
       // Pass name directly to avoid any stale-read timing issues
