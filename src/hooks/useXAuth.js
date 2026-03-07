@@ -18,9 +18,6 @@ async function generateChallenge(verifier) {
 }
 
 export async function startXLogin() {
-  // Prevent re-entry if a flow is already in progress
-  if (sessionStorage.getItem('x_pkce_verifier')) return
-
   const verifier = generateVerifier()
   const challenge = await generateChallenge(verifier)
   const state = generateVerifier().slice(0, 16)

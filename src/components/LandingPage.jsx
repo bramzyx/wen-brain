@@ -77,7 +77,7 @@ function TypewriterSubtitle() {
 }
 
 // Portal modal — always above everything, z-index 9999
-function NameModal({ onStart, initialName = '' }) {
+function NameModal({ onStart, onClose, initialName = '' }) {
   const [guestMode, setGuestMode] = useState(!!initialName) // returning users go straight to guest/name edit
   const [name, setName] = useState(initialName)
   const { setPlayerName, submitToLeaderboard } = useGameStore()
@@ -116,12 +116,24 @@ function NameModal({ onStart, initialName = '' }) {
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="card-dark p-8 max-w-md w-full text-center"
+        className="card-dark p-8 max-w-md w-full text-center relative"
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.85, opacity: 0 }}
         transition={{ delay: 0.05, type: 'spring', damping: 20 }}
       >
+        {/* Close button */}
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded transition-opacity hover:opacity-70"
+            style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1 }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        )}
         {!guestMode ? (
           /* ── X Login view ── */
           <>
@@ -483,6 +495,7 @@ export default function LandingPage() {
         {showNameModal && (
           <NameModal
             onStart={handleNameSubmit}
+            onClose={() => setShowNameModal(false)}
             initialName={playerName}
           />
         )}

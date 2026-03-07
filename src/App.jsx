@@ -35,6 +35,10 @@ function AuthCallback() {
     // Immediately strip OAuth params from the URL so a refresh can't re-trigger
     window.history.replaceState(null, '', window.location.pathname)
 
+    // Always clean up PKCE storage so a cancelled/failed flow doesn't block future attempts
+    sessionStorage.removeItem('x_pkce_verifier')
+    sessionStorage.removeItem('x_pkce_state')
+
     if (!code) {
       navigate('/', { replace: true })
       return
