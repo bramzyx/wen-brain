@@ -79,10 +79,19 @@ function TypewriterSubtitle() {
 // Portal modal — always above everything, z-index 9999
 function LoginModal({ onClose }) {
   const { play } = useSound()
+  const { setVisitor } = useGameStore()
+  const navigate = useNavigate()
 
   const handleXLogin = async () => {
     play('click')
     try { await startXLogin() } catch (_) {}
+  }
+
+  const handleVisitor = () => {
+    play('click')
+    setVisitor()
+    onClose()
+    navigate('/game')
   }
 
   return createPortal(
@@ -120,21 +129,33 @@ function LoginModal({ onClose }) {
         >
           <span style={{ color: 'var(--text-primary)' }}>WEN</span><span style={{ color: '#F7931A' }}>BRAIN</span>
         </div>
-        <p className="font-mono text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
-          Login with X to join the leaderboard.<br />Keep it real. IYKYK.
+        <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
+          Login with X for full access &amp; leaderboard.<br />
+          Or try the first 3 levels free, no account needed.
         </p>
 
+        {/* Primary: X login */}
         <button
           type="button"
           onClick={handleXLogin}
-          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base transition-all hover:opacity-90"
+          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base transition-all hover:opacity-90 mb-3"
           style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
         >
           <XIcon size={16} />
-          Login with X
+          Login with X — Full Access
         </button>
 
-        <p className="font-mono text-xs mt-6" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+        {/* Secondary: visitor mode */}
+        <button
+          type="button"
+          onClick={handleVisitor}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-syne font-bold text-sm transition-all hover:opacity-80"
+          style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
+        >
+          Continue as Visitor — Levels 1-3 Free
+        </button>
+
+        <p className="font-mono text-xs mt-5" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
           *not financial advice
         </p>
       </motion.div>
@@ -148,19 +169,27 @@ function getSavedXUser() {
 }
 
 export default function LandingPage() {
-  const { playerName, totalXP, fakeStats, xUser } = useGameStore()
+  const { playerName, totalXP, fakeStats, xUser, isVisitor } = useGameStore()
   const { play } = useSound()
   const navigate = useNavigate()
   const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
 
   // Zustand may not have rehydrated yet on first render — check localStorage directly
-  const isLoggedIn = !!(xUser || getSavedXUser())
+  const isLoggedIn = !!(xUser || getSavedXUser() || isVisitor)
 
   // Auto-close modal if OAuth completes while modal is open
   useEffect(() => {
     if (xUser && showLoginModal) setShowLoginModal(false)
   }, [xUser, showLoginModal])
+
+  // Auto-open modal if returning from a logout
+  useEffect(() => {
+    if (sessionStorage.getItem('showLoginModal')) {
+      sessionStorage.removeItem('showLoginModal')
+      setShowLoginModal(true)
+    }
+  }, [])
 
   const handleStartClick = () => {
     play('click')
@@ -329,7 +358,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             viewport={{ once: true }}
           >
-            {isLoggedIn && (
+            {(xUser || getSavedXUser()) && (
               <div className="card-dark p-4">
                 <div className="font-mono text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>
                   GM, SER
@@ -339,6 +368,19 @@ export default function LandingPage() {
                 </div>
                 <div className="font-mono text-xs mt-1" style={{ color: '#00FF94' }}>
                   {totalXP.toLocaleString()} XP total
+                </div>
+              </div>
+            )}
+            {isVisitor && !xUser && !getSavedXUser() && (
+              <div className="card-dark p-4">
+                <div className="font-mono text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>
+                  VISITOR MODE
+                </div>
+                <div className="font-syne font-bold text-sm" style={{ color: '#888' }}>
+                  Levels 1-3 unlocked
+                </div>
+                <div className="font-mono text-xs mt-1" style={{ color: '#F7931A' }}>
+                  Login with X for all 10 levels
                 </div>
               </div>
             )}

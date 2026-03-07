@@ -1,7 +1,12 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 import { useSound } from '../hooks/useSound'
+import { startXLogin } from '../hooks/useXAuth'
+
+const VISITOR_LIMIT = 3
 
 const LEVELS = [
   { id: 1,  title: 'In the Beginning: Bitcoin',         emoji: '🟠', color: '#F7931A', short: 'Bitcoin Basics',       desc: 'Money, trust, and the pizza guy' },
@@ -25,22 +30,107 @@ function hexToRgb(hex) {
   return `${r},${g},${b}`
 }
 
+function VisitorUpgradeModal({ onClose }) {
+  const { play } = useSound()
+  const handleXLogin = async () => {
+    play('click')
+    try { await startXLogin() } catch (_) {}
+  }
+  return createPortal(
+    <motion.div
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ background: 'rgba(8,11,17,0.92)', backdropFilter: 'blur(8px)', zIndex: 9999 }}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="card-dark p-8 max-w-sm w-full text-center relative"
+        initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.85, opacity: 0 }}
+        transition={{ type: 'spring', damping: 20 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button" onClick={onClose}
+          className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded transition-opacity hover:opacity-70"
+          style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}
+        >✕</button>
+
+        <div className="text-3xl mb-4">🔒</div>
+        <div className="font-mono text-xs mb-2" style={{ color: '#F7931A' }}>VISITOR LIMIT REACHED</div>
+        <h2 className="font-syne font-black text-xl mb-3" style={{ color: 'var(--text-primary)' }}>
+          Login with X to unlock<br />all 10 levels
+        </h2>
+        <p className="font-mono text-xs mb-6" style={{ color: 'var(--text-secondary)' }}>
+          Levels 4-10 are locked in visitor mode.<br />
+          Login for full access + leaderboard. WAGMI.
+        </p>
+        <button
+          type="button" onClick={handleXLogin}
+          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base transition-all hover:opacity-90"
+          style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.213 5.567z" />
+          </svg>
+          Login with X — It's Free
+        </button>
+        <p className="font-mono text-xs mt-4" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+          *still not financial advice
+        </p>
+      </motion.div>
+    </motion.div>,
+    document.body
+  )
+}
+
 export default function GamePage() {
   const navigate = useNavigate()
-  const { playerName, totalXP, levels, resetProgress, submitToLeaderboard } = useGameStore()
+  const { playerName, totalXP, levels, xUser, isVisitor, resetProgress, submitToLeaderboard } = useGameStore()
   const { play } = useSound()
+  const [showUpgrade, setShowUpgrade] = useState(false)
 
   const completedCount = levels.filter((l) => l.completed).length
   const progressPct = Math.round((completedCount / 10) * 100)
 
   const handleLevelClick = (lvl, storeLevel) => {
     if (!storeLevel?.unlocked) return
+    // Visitors can only play levels 1-3
+    if (isVisitor && !xUser && lvl.id > VISITOR_LIMIT) {
+      play('click')
+      setShowUpgrade(true)
+      return
+    }
     play('click')
     navigate(`/level/${lvl.id}`)
   }
 
   return (
     <div className="min-h-screen" style={{ paddingTop: '84px', background: 'var(--bg-primary)' }}>
+      <AnimatePresence>
+        {showUpgrade && <VisitorUpgradeModal onClose={() => setShowUpgrade(false)} />}
+      </AnimatePresence>
+
+      {/* Visitor banner */}
+      {isVisitor && !xUser && (
+        <div
+          className="sticky top-14 z-40 flex items-center justify-between px-4 py-2 gap-3 flex-wrap"
+          style={{ background: 'rgba(247,147,26,0.12)', borderBottom: '1px solid rgba(247,147,26,0.25)' }}
+        >
+          <span className="font-mono text-xs" style={{ color: '#F7931A' }}>
+            VISITOR MODE — Levels 1-3 free. Login with X to unlock all 10 levels.
+          </span>
+          <button
+            type="button"
+            onClick={async () => { try { await startXLogin() } catch (_) {} }}
+            className="font-mono text-xs px-3 py-1 rounded font-bold transition-all hover:opacity-80 shrink-0"
+            style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+          >
+            Login with X
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -127,10 +217,11 @@ export default function GamePage() {
               )
             }
 
-            const storeLevel = levels.find((l) => l.id === lvl.id)
-            const unlocked  = storeLevel?.unlocked ?? i === 0
-            const completed = storeLevel?.completed ?? false
-            const score     = storeLevel?.score ?? 0
+            const storeLevel    = levels.find((l) => l.id === lvl.id)
+            const unlocked      = storeLevel?.unlocked ?? i === 0
+            const completed     = storeLevel?.completed ?? false
+            const score         = storeLevel?.score ?? 0
+            const visitorLocked = isVisitor && !xUser && lvl.id > VISITOR_LIMIT
 
             return (
               <motion.div
@@ -143,26 +234,26 @@ export default function GamePage() {
                 style={{
                   background: completed
                     ? `rgba(${hexToRgb(lvl.color)},0.12)`
-                    : unlocked
+                    : unlocked && !visitorLocked
                     ? 'var(--bg-card)'
                     : 'rgba(0,0,0,0.4)',
                   borderColor: completed
                     ? lvl.color
-                    : unlocked
+                    : unlocked && !visitorLocked
                     ? 'var(--border)'
-                    : 'transparent',
-                  cursor: unlocked ? 'pointer' : 'not-allowed',
-                  opacity: unlocked ? 1 : 0.45,
+                    : visitorLocked ? 'rgba(247,147,26,0.2)' : 'transparent',
+                  cursor: unlocked && !visitorLocked ? 'pointer' : 'not-allowed',
+                  opacity: unlocked && !visitorLocked ? 1 : 0.5,
                   boxShadow: unlocked && !completed
                     ? `0 0 0 0 ${lvl.color}44`
                     : undefined,
                 }}
                 whileHover={
-                  unlocked
+                  unlocked && !visitorLocked
                     ? { scale: 1.03, boxShadow: `0 0 28px ${lvl.color}55` }
                     : { x: [0, -5, 5, -5, 5, 0], transition: { duration: 0.4 } }
                 }
-                whileTap={unlocked ? { scale: 0.97 } : {}}
+                whileTap={unlocked && !visitorLocked ? { scale: 0.97 } : {}}
               >
                 {/* Top accent bar */}
                 <div
@@ -181,7 +272,7 @@ export default function GamePage() {
                         border: `1px solid ${completed ? lvl.color : 'var(--border)'}`,
                       }}
                     >
-                      {completed ? `✓ ${score}/3` : unlocked ? 'UNLOCKED' : '🔒 LOCKED'}
+                      {completed ? `✓ ${score}/3` : visitorLocked ? '🔒 LOGIN TO UNLOCK' : unlocked ? 'UNLOCKED' : '🔒 LOCKED'}
                     </span>
                     <span className="text-xl">{lvl.emoji}</span>
                   </div>
@@ -215,8 +306,8 @@ export default function GamePage() {
                     </div>
                   )}
 
-                  {/* Play button on hover */}
-                  {unlocked && !completed && (
+                  {/* Play / lock button on hover */}
+                  {unlocked && !completed && !visitorLocked && (
                     <div
                       className="mt-3 font-syne font-bold text-xs text-center py-1.5 rounded transition-all opacity-0 group-hover:opacity-100"
                       style={{ background: lvl.color, color: '#000' }}
@@ -224,7 +315,15 @@ export default function GamePage() {
                       Start Level 🚀
                     </div>
                   )}
-                  {!unlocked && (
+                  {visitorLocked && (
+                    <div
+                      className="mt-3 font-syne font-bold text-xs text-center py-1.5 rounded transition-all opacity-0 group-hover:opacity-100"
+                      style={{ background: 'rgba(247,147,26,0.12)', color: '#F7931A', border: '1px solid rgba(247,147,26,0.3)' }}
+                    >
+                      Login with X to unlock
+                    </div>
+                  )}
+                  {!unlocked && !visitorLocked && (
                     <div
                       className="mt-3 font-syne font-bold text-xs text-center py-1.5 rounded transition-all opacity-0 group-hover:opacity-100"
                       style={{ background: 'rgba(255,51,102,0.12)', color: '#FF3366', border: '1px solid rgba(255,51,102,0.3)' }}

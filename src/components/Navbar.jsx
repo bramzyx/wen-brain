@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 import { useSound } from '../hooks/useSound'
+import { startXLogin } from '../hooks/useXAuth'
 
 const XIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -10,14 +11,24 @@ const XIcon = () => (
 )
 
 export default function Navbar() {
-  const { totalXP, soundEnabled, toggleSound, xUser, clearXUser, setPlayerName } = useGameStore()
+  const { totalXP, soundEnabled, toggleSound, xUser, isVisitor, logout } = useGameStore()
   const { play } = useSound()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     play('click')
-    try { localStorage.removeItem('xUser') } catch {}
-    clearXUser()
-    setPlayerName('')
+    try {
+      localStorage.removeItem('xUser')
+      localStorage.removeItem('wen-brain-save')
+    } catch {}
+    logout()
+    sessionStorage.setItem('showLoginModal', '1')
+    navigate('/')
+  }
+
+  const handleXLogin = async () => {
+    play('click')
+    try { await startXLogin() } catch (_) {}
   }
 
   const xpToNext = 1000
@@ -54,7 +65,8 @@ export default function Navbar() {
 
         {/* Right side: user + sound */}
         <div className="flex items-center gap-2">
-          {/* X logged-in user */}
+
+          {/* X logged-in: avatar + @username + sign out */}
           {xUser && (
             <div className="hidden sm:flex items-center gap-2">
               <div className="flex items-center gap-2 px-2 py-1 rounded"
@@ -86,6 +98,32 @@ export default function Navbar() {
                 Sign out
               </button>
             </div>
+          )}
+
+          {/* Visitor mode: show Login with X button */}
+          {isVisitor && !xUser && (
+            <button
+              type="button"
+              onClick={handleXLogin}
+              className="hidden sm:flex items-center gap-1.5 font-mono text-xs px-3 py-1.5 rounded transition-all hover:opacity-80"
+              style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+            >
+              <XIcon />
+              Login with X
+            </button>
+          )}
+
+          {/* Visitor sign out (exit visitor mode) */}
+          {isVisitor && !xUser && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="hidden sm:block font-mono text-xs px-2 py-1 rounded transition-opacity hover:opacity-70"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+              title="Exit visitor mode"
+            >
+              Exit
+            </button>
           )}
 
           {/* Sound toggle */}

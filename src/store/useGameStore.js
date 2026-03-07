@@ -19,7 +19,8 @@ export const useGameStore = create(
       playerName: '',
       totalXP: 0,
       levels: defaultLevels,
-      xUser: null, // { username, displayName, avatarUrl, accessToken }
+      xUser: null,      // { username, displayName, avatarUrl, xId }
+      isVisitor: false, // guest mode — levels 1-3 only, no leaderboard
 
       // UI
       soundEnabled: true,
@@ -36,8 +37,11 @@ export const useGameStore = create(
 
       // Actions
       setPlayerName: (name) => set({ playerName: name }),
-      setXUser: (user) => set({ xUser: user }),
-      clearXUser: () => set({ xUser: null }),
+      setXUser: (user) => set({ xUser: user, isVisitor: false }),
+      setVisitor: () => set({ isVisitor: true, xUser: null }),
+      // Full sign-out: wipe identity, reset to clean slate
+      logout: () => set({ xUser: null, isVisitor: false, playerName: '' }),
+      clearXUser: () => set({ xUser: null, isVisitor: false, playerName: '' }),
 
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
@@ -116,6 +120,7 @@ export const useGameStore = create(
         soundEnabled: s.soundEnabled,
         musicEnabled: s.musicEnabled,
         xUser: s.xUser,
+        isVisitor: s.isVisitor,
       }),
     }
   )
