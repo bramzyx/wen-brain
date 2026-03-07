@@ -54,7 +54,7 @@ export const useGameStore = create(
         const badge = perfect ? 'WAGMI' : null
         const bonusXP = perfect ? 150 : 0
         const newXP = totalXP + xpEarned + bonusXP
-        const levels_completed = levels.filter((l) => l.completed).length + 1
+        const newLevelsCompleted = levels.filter((l) => l.completed).length + 1
 
         set((s) => {
           const updatedLevels = s.levels.map((l) => {
@@ -66,27 +66,24 @@ export const useGameStore = create(
         })
 
         const xUserStr = localStorage.getItem('xUser')
-        const xUser = xUserStr ? JSON.parse(xUserStr) : null
+        if (!xUserStr) return
+        const xUser = JSON.parse(xUserStr)
 
-        if (xUser) {
-          const payload = {
+        console.log('[WenBrain] xUser from localStorage:', xUser)
+
+        fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             username: xUser.username,
             profile_picture: xUser.profilePicture || xUser.avatarUrl || null,
             xp: newXP,
-            levels_completed,
-          }
-          console.log('[WenBrain] Submitting:', payload)
-          fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          })
-            .then((res) => res.json())
-            .then((data) => console.log('[WenBrain] Response:', data))
-            .catch((err) => console.error('[WenBrain] Error:', err))
-        } else {
-          console.log('[WenBrain] No xUser in localStorage')
-        }
+            levels_completed: newLevelsCompleted,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => console.log('[WenBrain] Leaderboard saved:', d))
+          .catch((e) => console.error('[WenBrain] Error:', e))
       },
 
       submitScoreToSupabase: async () => {
