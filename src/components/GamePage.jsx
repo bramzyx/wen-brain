@@ -27,7 +27,7 @@ function hexToRgb(hex) {
 
 export default function GamePage() {
   const navigate = useNavigate()
-  const { playerName, totalXP, levels } = useGameStore()
+  const { playerName, totalXP, levels, resetProgress, submitToLeaderboard } = useGameStore()
   const { play } = useSound()
 
   const completedCount = levels.filter((l) => l.completed).length
@@ -232,14 +232,6 @@ export default function GamePage() {
                       🔒 Locked
                     </div>
                   )}
-                  {completed && (
-                    <div
-                      className="mt-3 font-syne font-bold text-xs text-center py-1.5 rounded"
-                      style={{ background: `${lvl.color}22`, color: lvl.color, border: `1px solid ${lvl.color}44` }}
-                    >
-                      REPLAY →
-                    </div>
-                  )}
                 </div>
               </motion.div>
             )
@@ -265,9 +257,26 @@ export default function GamePage() {
             </p>
           )}
           {completedCount === 10 && (
-            <p className="font-syne font-black text-xl" style={{ color: '#FFD700' }}>
-              🏆 CERTIFIED CRYPTO DEGEN — WAGMI SER 🏆
-            </p>
+            <div className="flex flex-col items-center gap-4">
+              <p className="font-syne font-black text-xl" style={{ color: '#FFD700' }}>
+                🏆 CERTIFIED CRYPTO DEGEN — WAGMI SER 🏆
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  play('click')
+                  submitToLeaderboard(playerName)
+                  resetProgress()
+                }}
+                className="font-mono text-xs px-6 py-2 rounded border transition-all hover:opacity-80"
+                style={{ color: 'var(--text-secondary)', borderColor: 'var(--border)', background: 'transparent' }}
+              >
+                Replay from beginning ↺
+              </button>
+              <p className="font-mono text-xs" style={{ color: 'var(--text-secondary)', opacity: 0.6 }}>
+                Your leaderboard score is saved. XP resets to 0.
+              </p>
+            </div>
           )}
         </motion.div>
       </div>
