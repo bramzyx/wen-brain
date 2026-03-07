@@ -25,10 +25,8 @@ function AuthCallback() {
     if (ran.current) return
     ran.current = true
 
-    // Parse code + state from the hash before clearing it
-    const hash = window.location.hash // '#/auth/callback?code=...&state=...'
-    const queryPart = hash.split('?')[1] || ''
-    const params = new URLSearchParams(queryPart)
+    // Parse code + state from the query string
+    const params = new URLSearchParams(window.location.search)
     const code = params.get('code')
     const state = params.get('state')
 
