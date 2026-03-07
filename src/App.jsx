@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
-import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Ticker from './components/Ticker'
 import LandingPage from './components/LandingPage'
@@ -8,39 +8,28 @@ import Footer from './components/Footer'
 import { handleXCallback } from './hooks/useXAuth'
 import { useGameStore } from './store/useGameStore'
 
-// Handles the /auth/callback hash route after X OAuth redirect
-function AuthCallback() {
+// Detects OAuth code in the hash query string (e.g. /#/?code=...&state=...)
+// and runs the token exchange. Lives outside <Routes> so it fires on any route.
+function OAuthHandler() {
+  const { search } = useLocation()
   const navigate = useNavigate()
   const { setXUser, setPlayerName, submitToLeaderboard, xUser } = useGameStore()
   const ran = useRef(false)
 
   useEffect(() => {
-    // Already authenticated — skip the exchange entirely
-    if (xUser) {
-      navigate('/', { replace: true })
-      return
-    }
-
-    // Prevent double-run from React StrictMode or re-renders
-    if (ran.current) return
-    ran.current = true
-
-    // Parse code + state from the query string
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(search)
     const code = params.get('code')
     const state = params.get('state')
 
-    // Immediately strip OAuth params from the URL so a refresh can't re-trigger
-    window.history.replaceState(null, '', window.location.pathname)
+    if (!code || ran.current || xUser) return
+    ran.current = true
 
-    // Always clean up PKCE storage so a cancelled/failed flow doesn't block future attempts
+    // Strip OAuth params from URL immediately
+    navigate('/', { replace: true })
+
+    // Clean up PKCE storage so a cancelled/failed flow never blocks future attempts
     sessionStorage.removeItem('x_pkce_verifier')
     sessionStorage.removeItem('x_pkce_state')
-
-    if (!code) {
-      navigate('/', { replace: true })
-      return
-    }
 
     handleXCallback(code, state).then((user) => {
       if (user) {
@@ -48,15 +37,10 @@ function AuthCallback() {
         setPlayerName(user.username)
         submitToLeaderboard(user.username)
       }
-      navigate('/', { replace: true })
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [search]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <div style={{ paddingTop: '120px', textAlign: 'center', color: '#F7931A', fontFamily: 'monospace' }}>
-      Connecting with X...
-    </div>
-  )
+  return null
 }
 
 const GamePage   = lazy(() => import('./components/GamePage'))
@@ -80,6 +64,7 @@ const Fallback = () => (
 export default function App() {
   return (
     <HashRouter>
+      <OAuthHandler />
       {/* Global visual effects */}
       <div className="scanline-overlay" />
       <div className="scanline-beam" />
@@ -102,7 +87,6 @@ export default function App() {
           <Route path="/level/8" element={<Level8Page />} />
           <Route path="/level/9"  element={<Level9Page />} />
           <Route path="/level/10" element={<Level10Page />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
           {/* Other levels redirect to game map until built */}
           <Route path="/level/:id" element={<GamePage />} />
         </Routes>

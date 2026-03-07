@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WenBrain — Connecting...</title>
+    <script>
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var state = params.get('state');
+      if (code) {
+        window.location.replace(
+          'https://wenbrain.com/#/?code=' + encodeURIComponent(code) +
+          '&state=' + encodeURIComponent(state || '')
+        );
+      } else {
+        window.location.replace('https://wenbrain.com/');
+      }
+    </script>
+  </head>
+  <body></body>
+</html>
