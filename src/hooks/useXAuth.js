@@ -52,7 +52,7 @@ export async function handleXCallback(code, returnedState) {
 
   try {
     // Token exchange is handled server-side by the Netlify function to avoid CORS
-    const res = await fetch('/.netlify/functions/auth', {
+    const res = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

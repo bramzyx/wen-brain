@@ -9,6 +9,7 @@ const CORS_HEADERS = {
 }
 
 export const handler = async (event, context) => {
+  console.log('=== BACKEND TRIGGERED ===', event.httpMethod)
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
