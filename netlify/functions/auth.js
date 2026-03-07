@@ -86,6 +86,7 @@ export const handler = async (event, context) => {
     }
 
     const { data } = await userRes.json()
+    console.log('[auth] X user data:', JSON.stringify(data))
 
     return {
       statusCode: 200,
