@@ -61,6 +61,24 @@ export const useGameStore = create(
             totalXP: s.totalXP + xpEarned + bonusXP,
           }
         })
+
+        // Fire-and-forget sync to global leaderboard (X users only)
+        const { xUser, totalXP, levels } = get()
+        if (xUser?.xId) {
+          const newXP = totalXP + xpEarned + bonusXP
+          const levelsCompleted = levels.filter((l) => l.completed || l.id === levelId).length
+          fetch('/.netlify/functions/leaderboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: xUser.xId,
+              username: xUser.username,
+              profilePicture: xUser.avatarUrl ?? null,
+              xp: newXP,
+              levelsCompleted,
+            }),
+          }).catch(() => {}) // silently ignore network errors
+        }
       },
 
       // Pass name directly to avoid any stale-read timing issues
