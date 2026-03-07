@@ -49,7 +49,7 @@ export const useGameStore = create(
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
         const bonusXP = perfect ? 150 : 0
-        const { xUser, totalXP, levels } = get()
+        const { totalXP, levels } = get()
         const newXP = totalXP + xpEarned + bonusXP
         const levels_completed = levels.filter((l) => l.completed).length + 1
 
@@ -62,6 +62,9 @@ export const useGameStore = create(
           return { levels: updatedLevels, totalXP: newXP }
         })
 
+        const xUserStr = localStorage.getItem('xUser')
+        const xUser = xUserStr ? JSON.parse(xUserStr) : null
+
         if (xUser) {
           const payload = {
             username: xUser.username,
@@ -69,17 +72,17 @@ export const useGameStore = create(
             xp: newXP,
             levels_completed,
           }
-          console.log('[WenBrain] Submitting to leaderboard:', payload)
+          console.log('[WenBrain] Submitting:', payload)
           fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
           })
             .then((res) => res.json())
-            .then((data) => console.log('[WenBrain] Leaderboard response:', data))
-            .catch((err) => console.error('[WenBrain] Leaderboard error:', err))
+            .then((data) => console.log('[WenBrain] Response:', data))
+            .catch((err) => console.error('[WenBrain] Error:', err))
         } else {
-          console.log('[WenBrain] No xUser, skipping leaderboard')
+          console.log('[WenBrain] No xUser in localStorage')
         }
       },
 
