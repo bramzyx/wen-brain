@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npm create vite@latest . -- --template react --yes)",
       "Bash(npm run dev)",
-      "Bash(npm install @netlify/blobs)"
+      "Bash(npm install @netlify/blobs)",
+      "Bash(npm install @supabase/supabase-js)"
     ]
   }
 }

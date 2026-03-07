@@ -1,45 +1,85 @@
-const { getStore } = require('@netlify/blobs');
+const { createClient } = require('@supabase/supabase-js');
+
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
 };
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: CORS_HEADERS, body: '' };
   }
+
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+  );
+
   try {
-    const store = getStore('leaderboard');
-    const SCORES_KEY = 'global-scores';
     if (event.httpMethod === 'GET') {
-      let scores = await store.get(SCORES_KEY, { type: 'json' }) || [];
-      scores.sort((a, b) => b.xp - a.xp);
-      return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify(scores) };
+      const { data, error } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .order('xp', { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      return {
+        statusCode: 200,
+        headers: CORS_HEADERS,
+        body: JSON.stringify(data),
+      };
     }
+
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body);
-      const { id, username, profilePicture, xp, levelsCompleted } = body;
+      const { username, profile_picture, xp, levels_completed } = body;
+
       if (!username || xp === undefined) {
-        return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Missing fields' }) };
+        return {
+          statusCode: 400,
+          headers: CORS_HEADERS,
+          body: JSON.stringify({ error: 'Missing fields' }),
+        };
       }
-      let scores = await store.get(SCORES_KEY, { type: 'json' }) || [];
-      const playerIndex = scores.findIndex(p => p.username === username);
-      if (playerIndex >= 0) {
-        if (xp > scores[playerIndex].xp) {
-          scores[playerIndex].xp = xp;
-          scores[playerIndex].levelsCompleted = levelsCompleted;
-          scores[playerIndex].profilePicture = profilePicture || scores[playerIndex].profilePicture;
+
+      const { data: existing } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .eq('username', username)
+        .single();
+
+      if (existing) {
+        if (xp > existing.xp) {
+          await supabase
+            .from('leaderboard')
+            .update({ xp, levels_completed, profile_picture })
+            .eq('username', username);
         }
       } else {
-        scores.push({ id, username, profilePicture, xp, levelsCompleted });
+        await supabase
+          .from('leaderboard')
+          .insert([{ username, profile_picture, xp, levels_completed }]);
       }
-      await store.setJSON(SCORES_KEY, scores);
-      return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify({ success: true }) };
+
+      return {
+        statusCode: 200,
+        headers: CORS_HEADERS,
+        body: JSON.stringify({ success: true }),
+      };
     }
+
     return { statusCode: 405, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+
   } catch (error) {
-    console.error('[Leaderboard] Blob error:', error);
-    return { statusCode: 500, headers: CORS_HEADERS, body: JSON.stringify({ error: error.message }) };
+    console.error('[Leaderboard] Error:', error);
+    return {
+      statusCode: 500,
+      headers: CORS_HEADERS,
+      body: JSON.stringify({ error: error.message }),
+    };
   }
 };
