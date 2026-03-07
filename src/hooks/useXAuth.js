@@ -51,8 +51,8 @@ export async function handleXCallback(code, returnedState) {
   sessionStorage.removeItem('x_pkce_verifier')
 
   try {
-    // Token exchange is handled server-side by the Netlify function to avoid CORS
-    const res = await fetch('/api/auth', {
+    // SLEDGEHAMMER FIX: Hitting the absolute Netlify URL to bypass all routing rules
+    const res = await fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
