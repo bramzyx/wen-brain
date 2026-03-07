@@ -40,7 +40,16 @@ export const useGameStore = create(
       setXUser: (user) => set({ xUser: user, isVisitor: false }),
       setVisitor: () => set({ isVisitor: true, xUser: null }),
       // Full sign-out: wipe identity, reset to clean slate
-      logout: () => set({ xUser: null, isVisitor: false, playerName: '' }),
+      logout: () => {
+        localStorage.removeItem('xUser')
+        set({
+          xUser: null,
+          isVisitor: false,
+          playerName: '',
+          totalXP: 0,
+          levels: defaultLevels,
+        })
+      },
       clearXUser: () => set({ xUser: null, isVisitor: false, playerName: '' }),
 
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
