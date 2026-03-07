@@ -1,7 +1,7 @@
 // X OAuth 2.0 PKCE — public client (no secret needed)
-// Replace X_CLIENT_ID with your actual X App Client ID
-const X_CLIENT_ID = 'bWFCY0pnMFNfRTBhNDg4NEJnRks6MTpjaQ'
-const X_REDIRECT_URI = 'https://wenbrain.com/auth/callback'
+const X_CLIENT_ID = 'UXFXa2xWZXFkUVRvM1pYSWlrTkY6MTpjaQ'
+// Hash-based redirect so the React SPA handles it client-side (no server needed)
+const X_REDIRECT_URI = 'https://wenbrain.com/#/auth/callback'
 
 function generateVerifier() {
   const arr = new Uint8Array(32)
@@ -38,11 +38,8 @@ export async function startXLogin() {
   window.location.href = `https://twitter.com/i/oauth2/authorize?${params}`
 }
 
-export async function handleXCallback() {
-  const params = new URLSearchParams(window.location.search)
-  const code = params.get('code')
-  const returnedState = params.get('state')
-
+// Called from the /auth/callback route with code + state parsed from the hash fragment
+export async function handleXCallback(code, returnedState) {
   if (!code || !returnedState) return null
 
   const storedState = sessionStorage.getItem('x_pkce_state')

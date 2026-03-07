@@ -8,28 +8,35 @@ import Footer from './components/Footer'
 import { handleXCallback } from './hooks/useXAuth'
 import { useGameStore } from './store/useGameStore'
 
-// Handles the OAuth redirect that lands anywhere on the domain
-function OAuthCallbackHandler() {
+// Handles the /auth/callback hash route after X OAuth redirect
+function AuthCallback() {
   const navigate = useNavigate()
   const { setXUser, setPlayerName, submitToLeaderboard } = useGameStore()
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (!params.get('code')) return
+    const hash = window.location.hash // '#/auth/callback?code=...&state=...'
+    const queryPart = hash.split('?')[1] || ''
+    const params = new URLSearchParams(queryPart)
+    const code = params.get('code')
+    const state = params.get('state')
 
-    handleXCallback().then((user) => {
+    if (!code) { navigate('/'); return }
+
+    handleXCallback(code, state).then((user) => {
       if (user) {
         setXUser(user)
         setPlayerName(user.username)
         submitToLeaderboard(user.username)
       }
-      // Clean up OAuth params from URL then go to game map
-      window.history.replaceState({}, '', window.location.pathname)
       navigate('/game')
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return null
+  return (
+    <div style={{ paddingTop: '120px', textAlign: 'center', color: '#F7931A', fontFamily: 'monospace' }}>
+      Connecting with X...
+    </div>
+  )
 }
 
 const GamePage   = lazy(() => import('./components/GamePage'))
@@ -53,7 +60,6 @@ const Fallback = () => (
 export default function App() {
   return (
     <HashRouter>
-      <OAuthCallbackHandler />
       {/* Global visual effects */}
       <div className="scanline-overlay" />
       <div className="scanline-beam" />
@@ -76,6 +82,7 @@ export default function App() {
           <Route path="/level/8" element={<Level8Page />} />
           <Route path="/level/9"  element={<Level9Page />} />
           <Route path="/level/10" element={<Level10Page />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           {/* Other levels redirect to game map until built */}
           <Route path="/level/:id" element={<GamePage />} />
         </Routes>
