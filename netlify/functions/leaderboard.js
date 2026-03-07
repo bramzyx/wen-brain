@@ -36,9 +36,12 @@ exports.handler = async (event) => {
 
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body);
-      const { username, profile_picture, xp, levels_completed } = body;
+      const levelsCompletedToSave = body.levels_completed || body.levelsCompleted || 0;
+      const profilePicToSave = body.profile_picture || body.profilePicture || body.avatarUrl || null;
+      const usernameToSave = body.username;
+      const xp = body.xp;
 
-      if (!username || xp === undefined) {
+      if (!usernameToSave || xp === undefined) {
         return {
           statusCode: 400,
           headers: CORS_HEADERS,
@@ -49,20 +52,20 @@ exports.handler = async (event) => {
       const { data: existing } = await supabase
         .from('leaderboard')
         .select('*')
-        .eq('username', username)
+        .eq('username', usernameToSave)
         .single();
 
       if (existing) {
         if (xp > existing.xp) {
           await supabase
             .from('leaderboard')
-            .update({ xp, levels_completed, profile_picture })
-            .eq('username', username);
+            .update({ xp, levels_completed: levelsCompletedToSave, profile_picture: profilePicToSave })
+            .eq('username', usernameToSave);
         }
       } else {
         await supabase
           .from('leaderboard')
-          .insert([{ username, profile_picture, xp, levels_completed }]);
+          .insert([{ username: usernameToSave, profile_picture: profilePicToSave, xp, levels_completed: levelsCompletedToSave }]);
       }
 
       return {

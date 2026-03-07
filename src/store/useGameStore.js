@@ -42,6 +42,7 @@ export const useGameStore = create(
       // Full sign-out: wipe identity, reset to clean slate
       logout: () => {
         localStorage.removeItem('xUser')
+        localStorage.removeItem('wen-brain-save')
         set({
           xUser: null,
           isVisitor: false,
