@@ -46,10 +46,13 @@ export const useGameStore = create(
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
       completeLevel: (levelId, score, xpEarned) => {
+        const { totalXP, levels } = get()
+        const alreadyCompleted = levels.find((l) => l.id === levelId)?.completed
+        if (alreadyCompleted) return
+
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
         const bonusXP = perfect ? 150 : 0
-        const { totalXP, levels } = get()
         const newXP = totalXP + xpEarned + bonusXP
         const levels_completed = levels.filter((l) => l.completed).length + 1
 

@@ -8,7 +8,7 @@ const RANK_LABELS = ['👑', '🥈', '🥉']
 const LEADERBOARD_URL = 'https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard'
 
 function Avatar({ entry, size = 28 }) {
-  const src = entry.profilePicture || entry.avatarUrl
+  const src = entry.profile_picture || entry.profilePicture || entry.avatarUrl
   if (src) {
     return (
       <img
