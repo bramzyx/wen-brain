@@ -86,6 +86,35 @@ export const useGameStore = create(
               console.error('[WenBrain] Leaderboard error:', error)
             })
         }
+
+        get().submitScoreToSupabase()
+      },
+
+      submitScoreToSupabase: async () => {
+        const state = get()
+        const xUserStr = localStorage.getItem('xUser')
+        if (!xUserStr) return
+        try {
+          const user = JSON.parse(xUserStr)
+          const payload = {
+            username: user.username,
+            profile_picture: user.profilePicture || user.avatarUrl || null,
+            xp: state.xp || state.totalXP || 0,
+            levels_completed: state.levelsCompleted || 0,
+          }
+          const res = await fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+          if (!res.ok) {
+            console.error('[WenBrain] Supabase sync failed:', res.status)
+          } else {
+            console.log('[WenBrain] Score secured on Supabase!', payload)
+          }
+        } catch (err) {
+          console.error('[WenBrain] Leaderboard error:', err)
+        }
       },
 
       // Sync current localStorage XP to Supabase — call on app load
