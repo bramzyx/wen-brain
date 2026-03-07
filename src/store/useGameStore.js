@@ -46,6 +46,7 @@ export const useGameStore = create(
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
       completeLevel: (levelId, score, xpEarned) => {
+        console.log('[WenBrain] completeLevel fired!', levelId, xpEarned)
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
         const bonusXP = perfect ? 150 : 0
@@ -87,10 +88,12 @@ export const useGameStore = create(
             })
         }
 
+        console.log('[WenBrain] Calling submitScoreToSupabase...')
         get().submitScoreToSupabase()
       },
 
       submitScoreToSupabase: async () => {
+        console.log('[WenBrain] Inside submitScoreToSupabase!')
         const state = get()
         const xUserStr = localStorage.getItem('xUser')
         if (!xUserStr) return
