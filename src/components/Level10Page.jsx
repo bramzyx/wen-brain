@@ -672,8 +672,6 @@ export default function Level10Page() {
   }
 
   const handleContinueAnyway = () => {
-    completeLevel(10, 0, 0)
-    submitToLeaderboard(playerName)
     window.scrollTo(0, 0)
     navigate('/game')
   }

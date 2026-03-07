@@ -518,8 +518,6 @@ export default function Level3Page() {
   }
 
   const handleContinueAnyway = () => {
-    completeLevel(3, 0, 0)
-    submitToLeaderboard(playerName)
     window.scrollTo(0, 0)
     navigate('/game')
   }

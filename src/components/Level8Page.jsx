@@ -524,8 +524,6 @@ export default function Level8Page() {
   }
 
   const handleContinueAnyway = () => {
-    completeLevel(8, 0, 0)
-    submitToLeaderboard(playerName)
     window.scrollTo(0, 0)
     navigate('/game')
   }
