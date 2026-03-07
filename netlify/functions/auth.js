@@ -95,7 +95,7 @@ export const handler = async (event, context) => {
         id:             data.id,
         username:       data.username,
         name:           data.name,
-        profilePicture: data.profile_image_url?.replace('_normal', '_bigger') ?? null,
+        profilePicture: data.profile_image_url ?? null,
       }),
     }
   } catch (err) {
