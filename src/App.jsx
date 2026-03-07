@@ -48,6 +48,7 @@ function OAuthCallbackHandler() {
 
     handleXCallback(OAUTH.code, OAUTH.state).then((user) => {
       if (user) {
+        console.log('[WenBrain] Saving xUser:', user)
         try { localStorage.setItem('xUser', JSON.stringify(user)) } catch {}
         setXUser(user)
         setPlayerName(user.username)
