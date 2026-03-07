@@ -24,18 +24,21 @@ function OAuthHandler() {
     if (!code || ran.current || xUser) return
     ran.current = true
 
-    // Strip OAuth params from URL immediately
+    // Strip OAuth params from URL immediately so a refresh can't re-trigger
     navigate('/', { replace: true })
 
-    // Clean up PKCE storage so a cancelled/failed flow never blocks future attempts
-    sessionStorage.removeItem('x_pkce_verifier')
-    sessionStorage.removeItem('x_pkce_state')
-
+    // handleXCallback reads + clears PKCE keys from sessionStorage itself;
+    // do NOT remove them here or the verifier check inside will fail.
     handleXCallback(code, state).then((user) => {
+      console.log('[WenBrain] OAuth result:', user)
       if (user) {
         setXUser(user)
         setPlayerName(user.username)
         submitToLeaderboard(user.username)
+      } else {
+        // Exchange failed — clean up any leftover PKCE state so future logins work
+        sessionStorage.removeItem('x_pkce_verifier')
+        sessionStorage.removeItem('x_pkce_state')
       }
     })
   }, [search]) // eslint-disable-line react-hooks/exhaustive-deps

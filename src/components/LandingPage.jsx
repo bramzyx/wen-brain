@@ -111,12 +111,17 @@ function LoginModal({ onClose }) {
           ✕
         </button>
 
-        <div className="text-4xl mb-4">₿</div>
-        <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
-          GM, ser. Who are you?
-        </h2>
+        <p className="font-mono text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+          Hello &amp; Welcome 👋
+        </p>
+        <div
+          className="mb-6"
+          style={{ fontFamily: '"IBM Plex Mono", monospace', fontWeight: 700, fontSize: '2rem', letterSpacing: '0.06em', lineHeight: 1 }}
+        >
+          <span style={{ color: 'var(--text-primary)' }}>WEN</span><span style={{ color: '#F7931A' }}>BRAIN</span>
+        </div>
         <p className="font-mono text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
-          Login with X to join the leaderboard. Keep it real. IYKYK.
+          Login with X to join the leaderboard.<br />Keep it real. IYKYK.
         </p>
 
         <button
