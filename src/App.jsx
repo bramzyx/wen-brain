@@ -52,12 +52,18 @@ function OAuthCallbackHandler() {
         setXUser(user)
         setPlayerName(user.username)
         submitToLeaderboard(user.username)
-        navigate('/game', { replace: true })
+        
+        // THE FIX: Force the browser to break out of the loading screen trap
+        window.location.href = '/#/game'
+        window.location.reload()
       } else {
         // Exchange failed — clean up PKCE so future logins work
         sessionStorage.removeItem('x_pkce_verifier')
         sessionStorage.removeItem('x_pkce_state')
-        navigate('/', { replace: true })
+        
+        // THE FIX: Return to home and reload
+        window.location.href = '/'
+        window.location.reload()
       }
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
