@@ -14,7 +14,9 @@ function Avatar({ entry, size = 28 }) {
       <img
         src={src}
         alt={entry.username || entry.name || '?'}
+        referrerPolicy="no-referrer"
         style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+        onError={(e) => { e.target.style.display = 'none' }}
       />
     )
   }
