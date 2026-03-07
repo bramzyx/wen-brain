@@ -51,7 +51,7 @@ export async function handleXCallback(code, returnedState) {
   sessionStorage.removeItem('x_pkce_verifier')
 
   try {
-    const tokenRes = await fetch('https://api.twitter.com/2/oauth2/token', {
+    const tokenRes = await fetch('https://corsproxy.io/?https://api.twitter.com/2/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -66,7 +66,7 @@ export async function handleXCallback(code, returnedState) {
     const { access_token } = await tokenRes.json()
 
     const userRes = await fetch(
-      'https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username',
+      'https://corsproxy.io/?https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username',
       { headers: { Authorization: `Bearer ${access_token}` } }
     )
     if (!userRes.ok) throw new Error(`User fetch error ${userRes.status}`)
