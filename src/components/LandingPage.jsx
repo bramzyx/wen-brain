@@ -152,7 +152,7 @@ function LoginModal({ onClose }) {
           className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-syne font-bold text-sm transition-all hover:opacity-80"
           style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
         >
-          Continue as Visitor — Levels 1-3 Free
+          Continue as Visitor
         </button>
 
         <p className="font-mono text-xs mt-5" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
