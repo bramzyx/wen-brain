@@ -1,10 +1,36 @@
-import { lazy, Suspense } from 'react'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Ticker from './components/Ticker'
 import LandingPage from './components/LandingPage'
 import SoundManager from './components/SoundManager'
 import Footer from './components/Footer'
+import { handleXCallback } from './hooks/useXAuth'
+import { useGameStore } from './store/useGameStore'
+
+// Handles the OAuth redirect that lands anywhere on the domain
+function OAuthCallbackHandler() {
+  const navigate = useNavigate()
+  const { setXUser, setPlayerName, submitToLeaderboard } = useGameStore()
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (!params.get('code')) return
+
+    handleXCallback().then((user) => {
+      if (user) {
+        setXUser(user)
+        setPlayerName(user.username)
+        submitToLeaderboard(user.username)
+      }
+      // Clean up OAuth params from URL then go to game map
+      window.history.replaceState({}, '', window.location.pathname)
+      navigate('/game')
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return null
+}
 
 const GamePage   = lazy(() => import('./components/GamePage'))
 const Level1Page = lazy(() => import('./components/Level1Page'))
@@ -27,6 +53,7 @@ const Fallback = () => (
 export default function App() {
   return (
     <HashRouter>
+      <OAuthCallbackHandler />
       {/* Global visual effects */}
       <div className="scanline-overlay" />
       <div className="scanline-beam" />

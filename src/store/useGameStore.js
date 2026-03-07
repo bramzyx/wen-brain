@@ -19,6 +19,7 @@ export const useGameStore = create(
       playerName: '',
       totalXP: 0,
       levels: defaultLevels,
+      xUser: null, // { username, displayName, avatarUrl, accessToken }
 
       // UI
       soundEnabled: true,
@@ -35,6 +36,8 @@ export const useGameStore = create(
 
       // Actions
       setPlayerName: (name) => set({ playerName: name }),
+      setXUser: (user) => set({ xUser: user }),
+      clearXUser: () => set({ xUser: null }),
 
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
@@ -58,17 +61,30 @@ export const useGameStore = create(
 
       // Pass name directly to avoid any stale-read timing issues
       submitToLeaderboard: (nameOverride) => {
-        const { totalXP, leaderboard } = get()
+        const { totalXP, leaderboard, levels, xUser } = get()
         const playerName = nameOverride || get().playerName
         if (!playerName) return
+
+        const levelsCompleted = levels.filter((l) => l.completed).length
+        const wagmiBadges = levels.filter((l) => l.badge === 'WAGMI').length
+
+        const entry = {
+          name: playerName,
+          xp: totalXP,
+          avatarUrl: xUser?.avatarUrl ?? null,
+          isXUser: !!xUser,
+          levelsCompleted,
+          wagmiBadges,
+        }
 
         const existing = leaderboard.findIndex((e) => e.name === playerName)
         let updated = [...leaderboard]
 
         if (existing >= 0) {
-          if (totalXP > updated[existing].xp) updated[existing] = { name: playerName, xp: totalXP }
+          // Keep best XP, always update profile data
+          updated[existing] = { ...entry, xp: Math.max(updated[existing].xp, totalXP) }
         } else {
-          updated.push({ name: playerName, xp: totalXP })
+          updated.push(entry)
         }
 
         updated = updated.sort((a, b) => b.xp - a.xp).slice(0, 10)
@@ -82,10 +98,12 @@ export const useGameStore = create(
         set({
           totalXP: 0,
           levels: defaultLevels,
+          xUser: null,
+          playerName: '',
         }),
     }),
     {
-      name: 'crypto-abs-save',
+      name: 'wen-brain-save',
       partialize: (s) => ({
         playerName: s.playerName,
         totalXP: s.totalXP,
@@ -93,6 +111,7 @@ export const useGameStore = create(
         leaderboard: s.leaderboard,
         soundEnabled: s.soundEnabled,
         musicEnabled: s.musicEnabled,
+        xUser: s.xUser,
       }),
     }
   )

@@ -4,10 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 import { useSound } from '../hooks/useSound'
+import { startXLogin } from '../hooks/useXAuth'
 import MatrixRain from './MatrixRain'
 import ParticleField from './ParticleField'
 import Leaderboard from './Leaderboard'
 import LevelMap from './LevelMap'
+
+const XIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.213 5.567z" />
+  </svg>
+)
 
 const MEME_QUOTES = [
   'Few understand this.',
@@ -71,15 +78,18 @@ function TypewriterSubtitle() {
 
 // Portal modal — always above everything, z-index 9999
 function NameModal({ onStart, initialName = '' }) {
+  const [guestMode, setGuestMode] = useState(!!initialName) // returning users go straight to guest/name edit
   const [name, setName] = useState(initialName)
   const { setPlayerName, submitToLeaderboard } = useGameStore()
   const { play } = useSound()
   const inputRef = useRef(null)
 
   useEffect(() => {
-    const t = setTimeout(() => inputRef.current?.focus(), 50)
-    return () => clearTimeout(t)
-  }, [])
+    if (guestMode) {
+      const t = setTimeout(() => inputRef.current?.focus(), 50)
+      return () => clearTimeout(t)
+    }
+  }, [guestMode])
 
   const handleStart = () => {
     const trimmed = name.trim()
@@ -88,6 +98,11 @@ function NameModal({ onStart, initialName = '' }) {
     setPlayerName(trimmed)
     submitToLeaderboard(trimmed)
     onStart()
+  }
+
+  const handleXLogin = async () => {
+    play('click')
+    try { await startXLogin() } catch (_) {}
   }
 
   const isReturning = !!initialName
@@ -107,47 +122,105 @@ function NameModal({ onStart, initialName = '' }) {
         exit={{ scale: 0.85, opacity: 0 }}
         transition={{ delay: 0.05, type: 'spring', damping: 20 }}
       >
-        <div className="text-4xl mb-4">{isReturning ? '👋' : '₿'}</div>
-        <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
-          {isReturning ? `Welcome back, ser` : 'Enter Your Alias, Ser'}
-        </h2>
-        <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-          {isReturning
-            ? <>Your name is on the leaderboard.<br />Edit it and LFG.</>
-            : 'Your name goes on the leaderboard. Choose wisely. IYKYK.'}
-        </p>
-        <input
-          ref={inputRef}
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleStart()}
-          placeholder="SatoshiGhost, DegenerateKing..."
-          maxLength={24}
-          className="w-full px-4 py-3 rounded-lg font-mono text-sm mb-4"
-          style={{
-            background: '#1a2030',
-            border: '1px solid #334155',
-            color: '#f0f6fc',
-            outline: 'none',
-            boxShadow: 'none',
-          }}
-        />
-        <button
-          type="button"
-          onClick={handleStart}
-          className="btn-primary w-full text-lg"
-          style={{
-            fontFamily: 'Syne, sans-serif',
-            opacity: name.trim() ? 1 : 0.45,
-            cursor: name.trim() ? 'pointer' : 'not-allowed',
-          }}
-        >
-          LFG 🚀
-        </button>
-        <p className="font-mono text-xs mt-4" style={{ color: 'var(--text-secondary)', opacity: 0.5 }}>
-          *not financial advice
-        </p>
+        {!guestMode ? (
+          /* ── X Login view ── */
+          <>
+            <div className="text-4xl mb-4">₿</div>
+            <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
+              GM, ser. Who are you?
+            </h2>
+            <p className="font-mono text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
+              Your name goes on the leaderboard. Choose wisely. IYKYK.
+            </p>
+
+            {/* Login with X — primary */}
+            <button
+              type="button"
+              onClick={handleXLogin}
+              className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg font-syne font-bold text-base mb-4 transition-all hover:opacity-90"
+              style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+            >
+              <XIcon size={16} />
+              Login with X
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
+              <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>or</span>
+              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
+            </div>
+
+            {/* Guest option */}
+            <button
+              type="button"
+              onClick={() => setGuestMode(true)}
+              className="w-full py-3 rounded-lg font-mono text-sm transition-all hover:opacity-80"
+              style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
+            >
+              Continue as Guest 👻
+            </button>
+
+            <p className="font-mono text-xs mt-4" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+              *not financial advice
+            </p>
+          </>
+        ) : (
+          /* ── Guest / returning user name input ── */
+          <>
+            <div className="text-4xl mb-4">{isReturning ? '👋' : '👻'}</div>
+            <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>
+              {isReturning ? 'Welcome back, ser' : 'Pick Your Alias'}
+            </h2>
+            <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
+              {isReturning
+                ? <>Your name is on the leaderboard.<br />Edit it and LFG.</>
+                : 'Your name goes on the leaderboard. No pressure.'}
+            </p>
+            <input
+              ref={inputRef}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleStart()}
+              placeholder="SatoshiGhost, DegenerateKing..."
+              maxLength={24}
+              className="w-full px-4 py-3 rounded-lg font-mono text-sm mb-4"
+              style={{
+                background: '#1a2030',
+                border: '1px solid #334155',
+                color: '#f0f6fc',
+                outline: 'none',
+                boxShadow: 'none',
+              }}
+            />
+            <button
+              type="button"
+              onClick={handleStart}
+              className="btn-primary w-full text-lg mb-3"
+              style={{
+                fontFamily: 'Syne, sans-serif',
+                opacity: name.trim() ? 1 : 0.45,
+                cursor: name.trim() ? 'pointer' : 'not-allowed',
+              }}
+            >
+              LFG 🚀
+            </button>
+            {!isReturning && (
+              <button
+                type="button"
+                onClick={() => setGuestMode(false)}
+                className="font-mono text-xs transition-opacity hover:opacity-80"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                ← back to Login with X
+              </button>
+            )}
+            <p className="font-mono text-xs mt-3" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+              *not financial advice
+            </p>
+          </>
+        )}
       </motion.div>
     </motion.div>,
     document.body
@@ -381,6 +454,27 @@ export default function LandingPage() {
           <p className="font-mono text-xs mt-3 opacity-40" style={{ color: 'var(--text-secondary)' }}>
             *still not financial advice
           </p>
+        </motion.div>
+      </section>
+
+      {/* Full leaderboard section */}
+      <section className="px-4 pb-20 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-center mb-8">
+            <div className="font-mono text-xs mb-2" style={{ color: '#F7931A' }}>RANKED BY XP</div>
+            <h2 className="font-syne font-black text-3xl" style={{ color: 'var(--text-primary)' }}>
+              HALL OF BASED
+            </h2>
+            <p className="font-mono text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+              Top degens who actually learned something. WAGMI.
+            </p>
+          </div>
+          <Leaderboard full />
         </motion.div>
       </section>
 
