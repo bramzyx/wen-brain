@@ -5,12 +5,7 @@ import { useGameStore } from '../store/useGameStore'
 const RANK_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32']
 const RANK_LABELS = ['👑', '🥈', '🥉']
 
-// Fallback demo data shown when the API has no real entries yet
-const DEMO_BOARD = [
-  { id: 'demo1', username: 'SatoshiGhost',      profilePicture: null, xp: 42500, levelsCompleted: 10 },
-  { id: 'demo2', username: 'DegenerateKing',     profilePicture: null, xp: 38200, levelsCompleted: 9  },
-  { id: 'demo3', username: 'NotFinancialAdvice', profilePicture: null, xp: 31100, levelsCompleted: 7  },
-]
+const LEADERBOARD_URL = 'https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard'
 
 function Avatar({ entry, size = 28 }) {
   const src = entry.profilePicture || entry.avatarUrl
@@ -43,7 +38,7 @@ function useLeaderboardData(autoRefreshMs = 60_000) {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch('/.netlify/functions/leaderboard')
+      const res = await fetch(LEADERBOARD_URL)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const json = await res.json()
       setData(Array.isArray(json) ? json : [])
@@ -69,8 +64,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
   const { data, loading, error } = useLeaderboardData()
 
   const displayLimit = full ? 50 : limit
-  const board   = data.length > 0 ? data.slice(0, displayLimit) : DEMO_BOARD.slice(0, displayLimit)
-  const isDemo  = data.length === 0
+  const board = data.slice(0, displayLimit)
 
   // ── Full leaderboard (Hall of Based section) ──────────────────────────────
   if (full) {
@@ -88,7 +82,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
         <AnimatePresence mode="wait">
           {board.length === 0 ? (
             <p className="font-mono text-sm text-center py-8" style={{ color: 'var(--text-secondary)' }}>
-              No players yet. Be the first degen. LFG.
+              {loading ? 'Loading...' : 'No players yet. Be the first! 🏆'}
             </p>
           ) : (
             <div className="space-y-3">
@@ -132,11 +126,6 @@ export default function Leaderboard({ limit = 3, full = false }) {
                           @{entry.username || entry.name}
                           {isMe && <span style={{ color: '#888', fontWeight: 400 }}> (you)</span>}
                         </span>
-                        {isDemo && (
-                          <span className="font-mono text-xs px-1 rounded" style={{ color: '#444', background: '#111' }}>
-                            demo
-                          </span>
-                        )}
                       </div>
                       <div className="font-mono text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
                         {entry.levelsCompleted ?? 0}/10 levels completed

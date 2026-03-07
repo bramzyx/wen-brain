@@ -67,7 +67,7 @@ export const useGameStore = create(
         if (xUser?.xId) {
           const newXP = totalXP + xpEarned + bonusXP
           const levelsCompleted = levels.filter((l) => l.completed || l.id === levelId).length
-          fetch('/.netlify/functions/leaderboard', {
+          fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
