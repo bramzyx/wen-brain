@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm create vite@latest . -- --template react --yes)",
-      "Bash(npm run dev)"
+      "Bash(npm run dev)",
+      "Bash(npm install @netlify/blobs)"
     ]
   }
 }
