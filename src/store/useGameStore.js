@@ -63,8 +63,7 @@ export const useGameStore = create(
 
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
-        const bonusXP = perfect ? 150 : 0
-        const newXP = totalXP + xpEarned + bonusXP
+        const newXP = totalXP + xpEarned
         const newLevelsCompleted = levels.filter((l) => l.completed).length + 1
 
         set((s) => {
