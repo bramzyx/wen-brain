@@ -51,34 +51,25 @@ export async function handleXCallback(code, returnedState) {
   sessionStorage.removeItem('x_pkce_verifier')
 
   try {
-    const tokenRes = await fetch('https://corsproxy.io/?https://api.twitter.com/2/oauth2/token', {
+    // Token exchange is handled server-side by the Netlify function to avoid CORS
+    const res = await fetch('/.netlify/functions/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         code,
-        grant_type: 'authorization_code',
-        client_id: X_CLIENT_ID,
-        redirect_uri: X_REDIRECT_URI,
         code_verifier: verifier,
+        redirect_uri: X_REDIRECT_URI,
       }),
     })
-    if (!tokenRes.ok) throw new Error(`Token error ${tokenRes.status}`)
-    const { access_token } = await tokenRes.json()
 
-    const userRes = await fetch(
-      'https://corsproxy.io/?https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username',
-      { headers: { Authorization: `Bearer ${access_token}` } }
-    )
-    if (!userRes.ok) throw new Error(`User fetch error ${userRes.status}`)
-    const { data } = await userRes.json()
+    if (!res.ok) throw new Error(`Auth function error ${res.status}`)
+    const user = await res.json()
 
     return {
-      xId: data.id,
-      username: data.username,
-      displayName: data.name,
-      // Replace _normal with _bigger for a slightly larger avatar
-      avatarUrl: data.profile_image_url?.replace('_normal', '_bigger') ?? null,
-      accessToken: access_token,
+      xId:         user.id,
+      username:    user.username,
+      displayName: user.name,
+      avatarUrl:   user.profilePicture ?? null,
     }
   } catch (err) {
     console.error('[WenBrain] X OAuth failed:', err)
