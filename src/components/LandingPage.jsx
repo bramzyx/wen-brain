@@ -375,7 +375,7 @@ export default function LandingPage() {
             className="btn-primary text-lg px-12 py-4"
             style={{ fontFamily: 'Syne, sans-serif' }}
           >
-            {isLoggedIn ? 'Continue Journey 🚀' : "Start Learning — It's Free 🔥"}
+            {isLoggedIn ? 'Continue Journey 🚀' : "Start Learning - It's Free 🔥"}
           </button>
           <p className="font-mono text-xs mt-3 opacity-40" style={{ color: 'var(--text-secondary)' }}>
             *still not financial advice
