@@ -9,18 +9,23 @@ const LEADERBOARD_URL = 'https://tubular-dieffenbachia-b254bc.netlify.app/.netli
 
 function Avatar({ entry, size = 28 }) {
   const src = entry.profile_picture || entry.profilePicture || entry.avatarUrl
+  const initial = ((entry.username || entry.name || '?')[0]).toUpperCase()
+
   if (src) {
     return (
       <img
         src={src}
         alt={entry.username || entry.name || '?'}
         referrerPolicy="no-referrer"
+        crossOrigin="anonymous"
         style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
-        onError={(e) => { e.target.style.display = 'none' }}
+        onError={(e) => {
+          e.target.style.display = 'none'
+          e.target.nextSibling.style.display = 'flex'
+        }}
       />
     )
   }
-  const initial = ((entry.username || entry.name || '?')[0]).toUpperCase()
   return (
     <div style={{
       width: size, height: size, borderRadius: '50%',
