@@ -64,21 +64,37 @@ export const useGameStore = create(
 
         // Fire-and-forget sync to global leaderboard (X users only)
         const { xUser, totalXP, levels } = get()
-        if (xUser?.xId) {
+        if (xUser?.username) {
           const newXP = totalXP + xpEarned + bonusXP
-          const levelsCompleted = levels.filter((l) => l.completed || l.id === levelId).length
+          const levels_completed = levels.filter((l) => l.completed || l.id === levelId).length
           fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id: xUser.xId,
               username: xUser.username,
-              profilePicture: xUser.avatarUrl ?? null,
+              profile_picture: xUser.avatarUrl ?? null,
               xp: newXP,
-              levelsCompleted,
+              levels_completed,
             }),
           }).catch(() => {}) // silently ignore network errors
         }
+      },
+
+      // Sync current localStorage XP to Supabase — call on app load
+      syncToLeaderboard: () => {
+        const { xUser, totalXP, levels } = get()
+        if (!xUser?.username) return
+        const levels_completed = levels.filter((l) => l.completed).length
+        fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: xUser.username,
+            profile_picture: xUser.avatarUrl ?? null,
+            xp: totalXP,
+            levels_completed,
+          }),
+        }).catch(() => {})
       },
 
       // Pass name directly to avoid any stale-read timing issues
