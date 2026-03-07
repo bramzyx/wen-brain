@@ -69,7 +69,8 @@ export async function handleXCallback(code, returnedState) {
       xId:         user.id,
       username:    user.username,
       displayName: user.name,
-      avatarUrl:   user.profilePicture ?? null,
+      avatarUrl:      user.profilePicture ?? null,
+      profilePicture: user.profilePicture ?? null,
     }
   } catch (err) {
     console.error('[WenBrain] X OAuth failed:', err)

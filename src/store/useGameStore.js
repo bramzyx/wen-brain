@@ -71,7 +71,7 @@ export const useGameStore = create(
         if (xUser) {
           const payload = {
             username: xUser.username,
-            profile_picture: xUser.avatarUrl || null,
+            profile_picture: xUser.profilePicture || xUser.avatarUrl || null,
             xp: newXP,
             levels_completed,
           }
