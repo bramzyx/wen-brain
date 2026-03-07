@@ -94,6 +94,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
           ) : (
             <div className="space-y-3">
               {board.map((entry, i) => {
+                if (i === 0) console.log('[WenBrain] Leaderboard entry sample:', entry)
                 const isMe = xUser && (entry.id === xUser.xId || entry.username === xUser.username)
                 return (
                   <motion.div
