@@ -46,50 +46,41 @@ export const useGameStore = create(
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
       completeLevel: (levelId, score, xpEarned) => {
-        console.log('[WenBrain] completeLevel fired!', levelId, xpEarned)
         const perfect = score === 3
         const badge = perfect ? 'WAGMI' : null
         const bonusXP = perfect ? 150 : 0
+        const { xUser, totalXP, levels } = get()
+        const newXP = totalXP + xpEarned + bonusXP
+        const levels_completed = levels.filter((l) => l.completed).length + 1
 
         set((s) => {
-          const levels = s.levels.map((l) => {
+          const updatedLevels = s.levels.map((l) => {
             if (l.id === levelId) return { ...l, completed: true, score, xpEarned, badge }
             if (l.id === levelId + 1) return { ...l, unlocked: true }
             return l
           })
-          return {
-            levels,
-            totalXP: s.totalXP + xpEarned + bonusXP,
-          }
+          return { levels: updatedLevels, totalXP: newXP }
         })
 
-        // Fire-and-forget sync to global leaderboard (X users only)
-        const { xUser, totalXP, levels } = get()
-        console.log('[WenBrain] xUser:', xUser)
-        if (xUser?.username) {
-          const newXP = totalXP + xpEarned + bonusXP
-          const levels_completed = levels.filter((l) => l.completed || l.id === levelId).length
-          console.log('[WenBrain] Submitting to leaderboard:', { username: xUser.username, xp: newXP, levels_completed })
+        if (xUser) {
+          const payload = {
+            username: xUser.username,
+            profile_picture: xUser.profilePicture || xUser.avatarUrl || null,
+            xp: newXP,
+            levels_completed,
+          }
+          console.log('[WenBrain] Submitting to leaderboard:', payload)
           fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              username: xUser.username,
-              profile_picture: xUser.avatarUrl ?? null,
-              xp: newXP,
-              levels_completed,
-            }),
+            body: JSON.stringify(payload),
           })
-            .then(async (res) => {
-              console.log('[WenBrain] Leaderboard response:', await res.json())
-            })
-            .catch((error) => {
-              console.error('[WenBrain] Leaderboard error:', error)
-            })
+            .then((res) => res.json())
+            .then((data) => console.log('[WenBrain] Leaderboard response:', data))
+            .catch((err) => console.error('[WenBrain] Leaderboard error:', err))
+        } else {
+          console.log('[WenBrain] No xUser, skipping leaderboard')
         }
-
-        console.log('[WenBrain] Calling submitScoreToSupabase...')
-        get().submitScoreToSupabase()
       },
 
       submitScoreToSupabase: async () => {
