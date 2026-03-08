@@ -40,13 +40,20 @@ export const useGameStore = create(
       setPlayerName: (name) => set({ playerName: name }),
       setXUser: async (user) => {
         set({ xUser: user, isVisitor: false })
-        // Restore points from Supabase
         try {
           const res = await fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard')
           const data = await res.json()
           const existing = data.find(e => e.username === user.username)
-          if (existing) {
-            set({ totalXP: existing.xp })
+          if (existing && existing.xp > 0) {
+            const levelsCompleted = existing.levels_completed || 0
+            set((s) => ({
+              totalXP: existing.xp,
+              levels: s.levels.map((l) => ({
+                ...l,
+                unlocked: l.id <= levelsCompleted + 1,
+                completed: l.id <= levelsCompleted,
+              }))
+            }))
           }
         } catch(e) { console.error('restore failed', e) }
       },

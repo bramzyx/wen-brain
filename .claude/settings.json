@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(grep -o \"Login with X\" dist/assets/index-*.js)",
-      "Bash(ls dist/assets/index-*.js)"
+      "Bash(ls dist/assets/index-*.js)",
+      "Bash(ls c:/Users/gbram/Desktop/wen-brain/netlify/functions/*.js)"
     ]
   }
 }
