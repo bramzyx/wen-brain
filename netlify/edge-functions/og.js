@@ -14,4 +14,4 @@ export default async (request, context) => {
   return new Response(modified, html)
 }
 
-export const config = { path: "/*" }
+export const config = { path: "/" }
