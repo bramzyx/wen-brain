@@ -38,7 +38,18 @@ export const useGameStore = create(
 
       // Actions
       setPlayerName: (name) => set({ playerName: name }),
-      setXUser: (user) => set({ xUser: user, isVisitor: false }),
+      setXUser: async (user) => {
+        set({ xUser: user, isVisitor: false })
+        // Restore points from Supabase
+        try {
+          const res = await fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard')
+          const data = await res.json()
+          const existing = data.find(e => e.username === user.username)
+          if (existing) {
+            set({ totalXP: existing.xp })
+          }
+        } catch(e) { console.error('restore failed', e) }
+      },
       setVisitor: () => set({ isVisitor: true, xUser: null }),
       // Full sign-out: wipe identity, reset to clean slate
       logout: () => {
