@@ -109,7 +109,7 @@ export default function GamePage() {
       {isVisitor && !xUser && (
         <div
           className="sticky top-14 z-40 flex items-center justify-between px-4 py-2 gap-3 flex-wrap"
-          style={{ background: 'rgba(247,147,26,0.12)', borderBottom: '1px solid rgba(247,147,26,0.25)' }}
+          style={{ background: 'rgba(8,11,17,0.85)', borderBottom: '1px solid rgba(247,147,26,0.25)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
         >
           <span className="font-mono text-xs" style={{ color: '#F7931A' }}>
             VISITOR MODE — Levels 1-3 free. Login with X for full access.
