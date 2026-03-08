@@ -77,7 +77,7 @@ function TypewriterSubtitle() {
 }
 
 function LoginModal({ onClose }) {
-  const { play } = useSound()
+  const { play, playBg } = useSound()
   const { setVisitor, soundEnabled, toggleSound } = useGameStore()
   const navigate = useNavigate()
 
@@ -90,6 +90,7 @@ function LoginModal({ onClose }) {
   const handleVisitor = () => {
     play('click')
     if (!soundEnabled) toggleSound()
+    playBg()
     setVisitor()
     onClose()
     navigate('/game')
