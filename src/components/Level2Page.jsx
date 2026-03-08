@@ -388,7 +388,7 @@ function QuizResults({ score, xp, attempt, maxAttempts, totalXP, tweet, onNext, 
 
       <div className="flex flex-col gap-3 items-center">
         <a
-          href={`https://twitter.com/intent/tweet?text=${tweet}&url=https://wenbrain.com?level=2`}
+          href={`https://twitter.com/intent/tweet?text=${tweet}&url=https://wenbrain.com/level/2`}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary px-8 py-3 inline-flex items-center justify-center gap-2 w-full sm:w-auto"
