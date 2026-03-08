@@ -83,13 +83,13 @@ function LoginModal({ onClose }) {
 
   const handleXLogin = async () => {
     play('click')
-    playBg('main')
+    playBg('bg-lofi')
     try { await startXLogin() } catch (_) {}
   }
 
   const handleVisitor = () => {
     play('click')
-    playBg('main')
+    playBg('bg-lofi')
     setVisitor()
     onClose()
     navigate('/game')
@@ -188,7 +188,7 @@ export default function LandingPage() {
 
   const handleStartClick = () => {
     play('click')
-    playBg('main')
+    playBg('bg-lofi')
     if (isLoggedIn) {
       navigate('/game')
     } else {
