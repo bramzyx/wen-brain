@@ -649,7 +649,7 @@ export default function Level9Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/btc_etf.gif" alt="Bitcoin ETF approval" />
+          <LevelImage src="/gifs/btc_etf" alt="Bitcoin ETF approval" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -705,7 +705,7 @@ export default function Level9Page() {
             </div>
           </div>
 
-          <LevelImage src="/gifs/halving.gif" alt="Bitcoin halving explained" />
+          <LevelImage src="/gifs/halving" alt="Bitcoin halving explained" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -774,7 +774,7 @@ export default function Level9Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/ai_crypto.gif" alt="AI and crypto combined" />
+          <LevelImage src="/gifs/ai_crypto" alt="AI and crypto combined" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -846,7 +846,7 @@ export default function Level9Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/layer2.gif" alt="Layer 2 blockchains explained" />
+          <LevelImage src="/gifs/layer2" alt="Layer 2 blockchains explained" />
 
           <MemeQuote>"Ethereum is too expensive. Base exists. Problem solved. Kind of."</MemeQuote>
         </SectionCard>
@@ -928,7 +928,7 @@ export default function Level9Page() {
             </p>
           </div>
 
-          <LevelImage src="/gifs/cycle.gif" alt="Crypto market cycle" />
+          <LevelImage src="/gifs/cycle" alt="Crypto market cycle" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>

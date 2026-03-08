@@ -625,7 +625,7 @@ export default function Level1Page() {
           </p>
 
           <img
-            src="/gifs/2008_crisis.gif"
+            src="/gifs/2008_crisis"
             alt="2008 financial crisis"
             style={{
               display: 'block',
@@ -686,7 +686,7 @@ export default function Level1Page() {
           </p>
 
           <img
-            src="/gifs/satoshi_mystery.gif"
+            src="/gifs/satoshi_mystery"
             alt="Satoshi Nakamoto mystery"
             style={{
               display: 'block',
@@ -782,7 +782,7 @@ export default function Level1Page() {
           </p>
 
           <img
-            src="/gifs/pizza_meme.gif"
+            src="/gifs/pizza_meme"
             alt="Bitcoin pizza meme"
             style={{
               display: 'block',

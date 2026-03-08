@@ -644,7 +644,7 @@ export default function Level7Page() {
             </div>
           </div>
 
-          <LevelImage src="/gifs/whale.gif" alt="Crypto whale market manipulation" />
+          <LevelImage src="/gifs/whale" alt="Crypto whale market manipulation" />
 
           <MemeQuote>"Whale spotted on chain" — Crypto Twitter going into panic mode</MemeQuote>
 
@@ -704,7 +704,7 @@ export default function Level7Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/fake_volume.gif" alt="Fake volume wash trading" />
+          <LevelImage src="/gifs/fake_volume" alt="Fake volume wash trading" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -767,7 +767,7 @@ export default function Level7Page() {
             </p>
           </div>
 
-          <LevelImage src="/gifs/pump_dump.gif" alt="Pump and dump scheme" />
+          <LevelImage src="/gifs/pump_dump" alt="Pump and dump scheme" />
 
           <MemeQuote>"This is definitely not a pump and dump" — every pump and dump group ever</MemeQuote>
         </SectionCard>
@@ -826,7 +826,7 @@ export default function Level7Page() {
             </div>
           </div>
 
-          <LevelImage src="/gifs/emotions.gif" alt="Crypto investor emotions cycle" />
+          <LevelImage src="/gifs/emotions" alt="Crypto investor emotions cycle" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -891,7 +891,7 @@ export default function Level7Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/institutions.gif" alt="Institutional Bitcoin adoption" />
+          <LevelImage src="/gifs/institutions" alt="Institutional Bitcoin adoption" />
 
           <MemeQuote>
             "First they ignore you. Then they laugh at you. Then they fight you.
