@@ -630,15 +630,17 @@ export default function Level10Page() {
   const handleAnswer = (selectedIdx, timeLeft) => {
     const q = shuffledQuiz[currentQ]
     const correct = selectedIdx !== -1 && selectedIdx === q.correct
-    const newAnswers = [...answers, { correct }]
+    const baseXP = correct ? 1 : 0
+    const newAnswers = [...answers, { correct, xp: baseXP }]
     setAnswers(newAnswers)
 
     if (currentQ + 1 >= shuffledQuiz.length) {
       const score = newAnswers.filter((a) => a.correct).length
+      const xp = newAnswers.reduce((s, a) => s + a.xp, 0) + (score === 10 ? 1 : 0)
       setFinalScore(score)
-      setEarnedXP(score)
+      setEarnedXP(xp)
       if (score >= 5) {
-        completeLevel(10, score)
+        completeLevel(10, xp)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}
@@ -1114,9 +1116,7 @@ export default function Level10Page() {
             10 questions · All topics · 45 seconds each
           </p>
           <div className="flex justify-center gap-6 mb-8 flex-wrap">
-            {[
-              ['+1 Point', 'per correct', ACCENT],
-            ].map(([val, lbl, c]) => (
+            {[['+1 PT', 'per correct answer', '#F7931A'], ['+1 PT', 'perfect bonus', '#00FF94']].map(([val, lbl, c]) => (
               <div key={lbl} className="text-center">
                 <div className="font-syne font-bold text-xl" style={{ color: c }}>{val}</div>
                 <div className="font-mono text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{lbl}</div>

@@ -479,15 +479,17 @@ export default function Level4Page() {
   const handleAnswer = (selectedIdx, timeLeft) => {
     const q = shuffledQuiz[currentQ]
     const correct = selectedIdx !== -1 && selectedIdx === q.correct
-    const newAnswers = [...answers, { correct }]
+    const baseXP = correct ? 1 : 0
+    const newAnswers = [...answers, { correct, xp: baseXP }]
     setAnswers(newAnswers)
 
     if (currentQ + 1 >= shuffledQuiz.length) {
       const score = newAnswers.filter((a) => a.correct).length
+      const xp = newAnswers.reduce((s, a) => s + a.xp, 0) + (score === 3 ? 1 : 0)
       setFinalScore(score)
-      setEarnedXP(score)
+      setEarnedXP(xp)
       if (score >= 2) {
-        completeLevel(4, score)
+        completeLevel(4, xp)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}
@@ -893,7 +895,7 @@ export default function Level4Page() {
             3 questions · 30 seconds each
           </p>
           <div className="flex justify-center gap-8 mb-8">
-            {[['+1 Point', 'per correct', ACCENT]].map(([val, lbl, c]) => (
+            {[['+1 PT', 'per correct answer', '#F7931A'], ['+1 PT', 'perfect bonus', '#00FF94']].map(([val, lbl, c]) => (
               <div key={lbl} className="text-center">
                 <div className="font-syne font-bold text-xl" style={{ color: c }}>{val}</div>
                 <div className="font-mono text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{lbl}</div>
