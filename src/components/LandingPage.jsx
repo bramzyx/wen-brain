@@ -76,7 +76,6 @@ function TypewriterSubtitle() {
   )
 }
 
-// Portal modal — always above everything, z-index 9999
 function LoginModal({ onClose }) {
   const { play } = useSound()
   const { setVisitor } = useGameStore()
@@ -109,7 +108,6 @@ function LoginModal({ onClose }) {
         exit={{ scale: 0.85, opacity: 0 }}
         transition={{ delay: 0.05, type: 'spring', damping: 20 }}
       >
-        {/* Close button */}
         <button
           type="button"
           onClick={onClose}
@@ -134,7 +132,6 @@ function LoginModal({ onClose }) {
           Or try the first 3 levels free, no account needed.
         </p>
 
-        {/* Primary: X login */}
         <button
           type="button"
           onClick={handleXLogin}
@@ -145,7 +142,6 @@ function LoginModal({ onClose }) {
           Login with X — Full Access
         </button>
 
-        {/* Secondary: visitor mode */}
         <button
           type="button"
           onClick={handleVisitor}
@@ -169,21 +165,18 @@ function getSavedXUser() {
 }
 
 export default function LandingPage() {
-  const { playerName, totalXP, fakeStats, xUser, isVisitor } = useGameStore()
+  const { totalXP, xUser, isVisitor } = useGameStore()
   const { play } = useSound()
   const navigate = useNavigate()
   const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
 
-  // Zustand may not have rehydrated yet on first render — check localStorage directly
   const isLoggedIn = !!(xUser || getSavedXUser() || isVisitor)
 
-  // Auto-close modal if OAuth completes while modal is open
   useEffect(() => {
     if (xUser && showLoginModal) setShowLoginModal(false)
   }, [xUser, showLoginModal])
 
-  // Auto-open modal if returning from a logout
   useEffect(() => {
     if (sessionStorage.getItem('showLoginModal')) {
       sessionStorage.removeItem('showLoginModal')
@@ -202,15 +195,11 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen relative" style={{ paddingTop: '84px' }}>
-      {/* Hero section — NO overflow-hidden so title is never clipped.
-          Particle/bg layers use a separate absolute inset container that clips itself. */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4"
         style={{ minHeight: '100vh' }}>
 
-        {/* Background effects live in their own overflow-hidden shell */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
           <ParticleField />
-          {/* Radial glow */}
           <div
             style={{
               position: 'absolute', inset: 0,
@@ -219,10 +208,8 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* MatrixRain renders position:fixed so it's unaffected by any container */}
         <MatrixRain />
 
-        {/* Content — always on top, safe padding ensures title never kisses the navbar */}
         <div className="relative text-center max-w-4xl mx-auto w-full"
           style={{ zIndex: 2, paddingTop: '5vh', paddingBottom: '4vh' }}>
           <motion.div
@@ -267,7 +254,6 @@ export default function LandingPage() {
             <RotatingQuote />
           </motion.div>
 
-          {/* CTA — inline style, no Framer wrapper that could interfere with clicks */}
           <div style={{ opacity: 0, animation: 'fadeUp 0.5s ease 1.1s forwards' }}>
             <button
               type="button"
@@ -287,19 +273,10 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-                PLAYERS LEARNING
+                LEARN OR GET REKT
               </div>
               <div className="font-syne font-bold text-lg" style={{ color: '#00FF94' }}>
-                {(fakeStats.players + (totalXP > 0 ? 1 : 0)).toLocaleString()}
-              </div>
-            </div>
-            <div style={{ color: 'var(--border)' }}>|</div>
-            <div className="text-center">
-              <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-                POINTS EARNED TODAY
-              </div>
-              <div className="font-syne font-bold text-lg" style={{ color: '#F7931A' }}>
-                {(fakeStats.xpToday + totalXP).toLocaleString()}
+                ON-CHAIN 2026
               </div>
             </div>
             <div style={{ color: 'var(--border)' }}>|</div>
@@ -325,7 +302,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Level map + Leaderboard */}
       <section ref={levelMapRef} className="relative px-4 pb-20 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <motion.div
@@ -367,7 +343,7 @@ export default function LandingPage() {
                   @{(xUser || getSavedXUser()).username}
                 </div>
                 <div className="font-mono text-xs mt-1" style={{ color: '#00FF94' }}>
-                  {totalXP.toLocaleString()} pts total
+                  {totalXP.toLocaleString()} points total
                 </div>
               </div>
             )}
@@ -425,7 +401,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Full leaderboard section */}
       <section className="px-4 pb-20 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -446,7 +421,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Login modal — portal, always on top */}
       <AnimatePresence>
         {showLoginModal && (
           <LoginModal onClose={() => setShowLoginModal(false)} />
