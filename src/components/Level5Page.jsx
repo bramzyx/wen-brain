@@ -651,7 +651,7 @@ export default function Level5Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/ftx_sbf" alt="SBF FTX collapse" />
+          <LevelImage src="./images/ftx_sbf.gif" alt="SBF FTX collapse" />
 
           <MemeQuote>"I am going to work" — SBF arriving at court in his cargo shorts</MemeQuote>
 
@@ -715,7 +715,7 @@ export default function Level5Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/luna_crash" alt="Terra Luna death spiral chart" />
+          <LevelImage src="./images/luna_crash.gif" alt="Terra Luna death spiral chart" />
 
           <WarningBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -765,7 +765,7 @@ export default function Level5Page() {
             <strong style={{ color: ACCENT }}>$0</strong> in hours.
           </p>
 
-          <LevelImage src="/gifs/bitconnect" alt="BitConnect conference meme" />
+          <LevelImage src="./images/bitconnect.gif" alt="BitConnect conference meme" />
 
           <MemeQuote>"The most unhinged conference moment in history. And he lost everything."</MemeQuote>
         </SectionCard>
@@ -830,7 +830,7 @@ export default function Level5Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/rug_pull" alt="Rug pull meme" />
+          <LevelImage src="./images/rug_pull.gif" alt="Rug pull meme" />
         </SectionCard>
 
         {/* ══════════════════ SECTION 5 ══════════════════ */}
@@ -879,7 +879,7 @@ export default function Level5Page() {
             </p>
           </WarningBox>
 
-          <LevelImage src="/gifs/ngmi" alt="NGMI" />
+          <LevelImage src="./images/ngmi.gif" alt="NGMI" />
 
           <MemeQuote>
             "Crypto has made more millionaires and more broke people than anything else.

@@ -3,10 +3,7 @@
     "allow": [
       "Bash(grep -o \"Login with X\" dist/assets/index-*.js)",
       "Bash(ls dist/assets/index-*.js)",
-      "Bash(ls c:/Users/gbram/Desktop/wen-brain/netlify/functions/*.js)",
-      "Bash(grep -l 'src=\"\"./images/' c:/Users/gbram/Desktop/wen-brain/src/components/Level*Page.jsx)",
-      "Bash(dir c:/Users/gbram/Desktop/wen-brain/public/gifs/)",
-      "Bash(grep -h 'src=\"\"/gifs/\\\\|src=\"\"/images/' c:/Users/gbram/Desktop/wen-brain/src/components/Level*Page.jsx)"
+      "Bash(ls c:/Users/gbram/Desktop/wen-brain/netlify/functions/*.js)"
     ]
   }
 }

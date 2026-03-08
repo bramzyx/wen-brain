@@ -653,7 +653,7 @@ export default function Level8Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/wallet_explained" alt="Crypto wallet types explained" />
+          <LevelImage src="./images/wallet_explained.gif" alt="Crypto wallet types explained" />
 
           <MemeQuote>"Not your keys, not your coins" — the most important rule in crypto</MemeQuote>
 
@@ -722,7 +722,7 @@ export default function Level8Page() {
             </p>
           </div>
 
-          <LevelImage src="/gifs/seed_phrase" alt="Seed phrase security" />
+          <LevelImage src="./images/seed_phrase.gif" alt="Seed phrase security" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -789,7 +789,7 @@ export default function Level8Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/cex_dex" alt="CEX vs DEX explained" />
+          <LevelImage src="./images/cex_dex.gif" alt="CEX vs DEX explained" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -850,7 +850,7 @@ export default function Level8Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/charts" alt="Crypto chart reading basics" />
+          <LevelImage src="./images/charts.gif" alt="Crypto chart reading basics" />
 
           <MemeQuote>"I learned to read charts. Then lost money faster and more confidently."</MemeQuote>
         </SectionCard>
@@ -935,7 +935,7 @@ export default function Level8Page() {
             </div>
           </div>
 
-          <LevelImage src="/gifs/dyor" alt="DYOR research guide" />
+          <LevelImage src="./images/dyor.gif" alt="DYOR research guide" />
 
           <MemeQuote>
             "DYOR does not mean read one tweet and convince yourself you did research.

@@ -640,7 +640,7 @@ export default function Level2Page() {
             No goodbye tour. No book deal. No interview. Just gone.
           </p>
 
-          <LevelImage src="/gifs/satoshi_ghost" alt="Satoshi ghost mystery" />
+          <LevelImage src="./images/satoshi_ghost.gif" alt="Satoshi ghost mystery" />
 
           <MemeQuote>"Imagine building a $1 trillion thing and just dipping" — probably everyone</MemeQuote>
         </SectionCard>
@@ -745,7 +745,7 @@ export default function Level2Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/satoshi_theories" alt="Satoshi theories conspiracy board" />
+          <LevelImage src="./images/satoshi_theories.gif" alt="Satoshi theories conspiracy board" />
 
           <MemeQuote>"Craig Wright is Satoshi" — said nobody who understands cryptography</MemeQuote>
         </SectionCard>
@@ -827,7 +827,7 @@ export default function Level2Page() {
             </p>
           </CalloutBox>
 
-          <LevelImage src="/gifs/satoshi_disappear" alt="Satoshi disappears into the void" />
+          <LevelImage src="./images/satoshi_disappear.gif" alt="Satoshi disappears into the void" />
 
           <MemeQuote>"Satoshi is the only person in history who became more powerful by disappearing."</MemeQuote>
         </SectionCard>

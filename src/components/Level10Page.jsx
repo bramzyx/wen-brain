@@ -808,7 +808,7 @@ export default function Level10Page() {
             You just learned all of it. That already puts you ahead of 99% of people who touch crypto.
           </p>
 
-          <LevelImage src="/gifs/graduation" alt="Graduation celebration" />
+          <LevelImage src="./images/graduation.gif" alt="Graduation celebration" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -887,7 +887,7 @@ export default function Level10Page() {
             </p>
           </div>
 
-          <LevelImage src="/gifs/mindset" alt="Winning mindset" />
+          <LevelImage src="./images/mindset.gif" alt="Winning mindset" />
 
           <MemeQuote>"The market can stay irrational longer than you can stay solvent."</MemeQuote>
         </SectionCard>
@@ -942,7 +942,7 @@ export default function Level10Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/dca" alt="Dollar cost averaging strategy" />
+          <LevelImage src="./images/dca.gif" alt="Dollar cost averaging strategy" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -1000,7 +1000,7 @@ export default function Level10Page() {
             </div>
           </div>
 
-          <LevelImage src="/gifs/emotional_cycle" alt="Crypto emotional cycle" />
+          <LevelImage src="./images/emotional_cycle.gif" alt="Crypto emotional cycle" />
 
           <MemeQuote>"Just going to check the price one more time before bed" — everyone at 3am during a bull run</MemeQuote>
         </SectionCard>
@@ -1081,7 +1081,7 @@ export default function Level10Page() {
             ))}
           </div>
 
-          <LevelImage src="/gifs/wagmi_final" alt="WAGMI final celebration" />
+          <LevelImage src="./images/wagmi_final.gif" alt="WAGMI final celebration" />
 
           <MemeQuote>
             "You started as ngmi.{'\n'}
