@@ -85,9 +85,10 @@ function OAuthCallbackHandler() {
   )
 }
 
-// ── Auth guard — redirects to landing if no xUser in localStorage ────────────
+// ── Auth guard — redirects to landing if no xUser and not a visitor ──────────
 function RequireAuth({ children }) {
-  if (!localStorage.getItem('xUser')) return <Navigate to="/" replace />
+  const isVisitor = useGameStore((s) => s.isVisitor)
+  if (!localStorage.getItem('xUser') && !isVisitor) return <Navigate to="/" replace />
   return children
 }
 
