@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGameStore } from '../store/useGameStore'
 import { useSound } from '../hooks/useSound'
@@ -31,9 +30,6 @@ export default function Navbar() {
     try { await startXLogin() } catch (_) {}
   }
 
-  const xpToNext = 30
-  const xpProgress = Math.min(totalXP / xpToNext, 1) * 100
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b"
       style={{ background: 'rgba(8,11,17,0.85)', backdropFilter: 'blur(12px)', borderColor: 'var(--border)' }}>
@@ -45,22 +41,11 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* XP bar */}
-        <div className="flex-1 max-w-xs hidden sm:block">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs" style={{ color: '#F7931A' }}>PTS</span>
-            <div className="flex-1 h-1.5 rounded-full" style={{ background: 'var(--border)' }}>
-              <motion.div
-                className="h-full rounded-full"
-                style={{ background: 'linear-gradient(90deg, #F7931A, #00FF94)' }}
-                animate={{ width: `${xpProgress}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
-            <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-              {totalXP}/{xpToNext} pts
-            </span>
-          </div>
+        {/* Points display */}
+        <div className="hidden sm:block">
+          <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
+            🧠 Points: <span style={{ color: '#F7931A' }}>{totalXP}</span>
+          </span>
         </div>
 
         {/* Right side: user + sound */}
