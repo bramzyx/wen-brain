@@ -35,7 +35,7 @@ export default function Navbar() {
 
           {/* Dark X Follow Button with Glitch */}
           <a 
-            href="https://x.com/wenbrain" 
+            href="https://x.com/wenbrainbro"
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 bg-black text-white border border-[#333] px-2 py-1 sm:px-3 sm:py-1 rounded text-[10px] font-mono hover:bg-[#111] transition-all"
