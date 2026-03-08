@@ -80,14 +80,6 @@ function OAuthCallbackHandler() {
         <span style={{ color: '#F7931A' }}>BRAIN</span>
       </div>
       <div style={{ color: '#888', fontSize: '0.85rem' }}>Logging you in...</div>
-      <div style={{ width: '140px', height: '2px', background: '#1a1a1a', borderRadius: '1px', overflow: 'hidden' }}>
-        <div style={{
-          height: '100%',
-          background: 'linear-gradient(90deg, #F7931A, #00FF94)',
-          animation: 'wbSlide 1.4s ease-in-out infinite',
-        }} />
-      </div>
-      <style>{`@keyframes wbSlide{0%{transform:translateX(-100%);width:60%}50%{width:80%}100%{transform:translateX(240%);width:60%}}`}</style>
     </div>
   )
 }

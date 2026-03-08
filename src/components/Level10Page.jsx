@@ -756,7 +756,7 @@ export default function Level10Page() {
             You made it. All 10 topics. All 10 levels. One final boss quiz. Let's see what you learned, ser.
           </p>
           <div className="flex gap-3 flex-wrap">
-            {[['1,000 XP base', ACCENT], ['+500 perfect bonus', '#FFA500'], ['~10 min read', 'var(--text-secondary)']].map(([t, c]) => (
+            {[['1,000 Points base', ACCENT], ['+500 perfect bonus', '#FFA500'], ['~10 min read', 'var(--text-secondary)']].map(([t, c]) => (
               <span key={t} className="font-mono text-xs px-3 py-1 rounded-full" style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>
                 {t}
               </span>

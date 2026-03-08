@@ -600,7 +600,7 @@ export default function Level7Page() {
             Insider secrets: how whales move markets, why charts lie, and how Wall Street finally joined the game.
           </p>
           <div className="flex gap-3 flex-wrap">
-            {[['300 XP base', ACCENT], ['+150 perfect bonus', '#FFD700'], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
+            {[['300 Points base', ACCENT], ['+150 perfect bonus', '#FFD700'], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
               <span key={t} className="font-mono text-xs px-3 py-1 rounded-full" style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>
                 {t}
               </span>

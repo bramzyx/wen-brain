@@ -148,7 +148,7 @@ export default function GamePage() {
             </h1>
             {playerName && (
               <p className="font-mono text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                gm, <span style={{ color: '#00FF94' }}>{playerName}</span> — {totalXP.toLocaleString()} pts
+                gm, <span style={{ color: '#00FF94' }}>{playerName}</span> — {totalXP.toLocaleString()} Points
               </p>
             )}
           </div>

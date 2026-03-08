@@ -601,7 +601,7 @@ export default function Level9Page() {
             Bitcoin ETF. The Halving. AI agents. Layer 2s. Where we are in the cycle. The current meta — explained.
           </p>
           <div className="flex gap-3 flex-wrap">
-            {[['300 XP base', ACCENT], ['+150 perfect bonus', '#FFD700'], ['~8 min read', 'var(--text-secondary)']].map(([t, c]) => (
+            {[['300 Points base', ACCENT], ['+150 perfect bonus', '#FFD700'], ['~8 min read', 'var(--text-secondary)']].map(([t, c]) => (
               <span key={t} className="font-mono text-xs px-3 py-1 rounded-full" style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>
                 {t}
               </span>
