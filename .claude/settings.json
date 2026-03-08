@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -o \"Login with X\" dist/assets/index-*.js)",
+      "Bash(ls dist/assets/index-*.js)"
+    ]
+  }
+}
