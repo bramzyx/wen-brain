@@ -28,7 +28,7 @@ export default function Navbar() {
         
         {/* Left: Logo */}
         <Link to="/" className="flex items-center gap-2 no-underline">
-          <span className="font-mono font-bold text-lg tracking-tighter text-white">WEN</span>
+          <span className="font-mono font-bold text-lg tracking-tighter text-white">WENTEST</span>
           <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A]">BRAIN</span>
         </Link>
 
