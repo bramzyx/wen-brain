@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-const _inFlightLevels = new Set()
 
 const LEVEL_COUNT = 10
 
@@ -58,32 +57,32 @@ export const useGameStore = create(
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
       completeLevel: (levelId, score, xpEarned) => {
-        console.trace('[WenBrain] completeLevel TRACE', levelId, score, xpEarned)
-        console.log('[WenBrain] completeLevel called:', levelId, score, xpEarned)
-        const { totalXP, levels } = get()
-        const alreadyCompleted = levels.find((l) => l.id === levelId)?.completed
-        if (alreadyCompleted || _inFlightLevels.has(levelId)) return
-        _inFlightLevels.add(levelId)
+        const state = get()
+        const level = state.levels.find((l) => l.id === levelId)
+        if (!level || level.completed) return
 
-        const perfect = score === 3
-        const badge = perfect ? 'WAGMI' : null
-        const newXP = totalXP + xpEarned
-        const newLevelsCompleted = levels.filter((l) => l.completed).length + 1
-
-        set((s) => {
-          const updatedLevels = s.levels.map((l) => {
-            if (l.id === levelId) return { ...l, completed: true, score, xpEarned, badge }
+        // Immediately mark completed in state to block any second call
+        set((s) => ({
+          levels: s.levels.map((l) => {
+            if (l.id === levelId) return { ...l, completed: true, score, xpEarned, badge: score === 3 ? 'WAGMI' : null }
             if (l.id === levelId + 1) return { ...l, unlocked: true }
             return l
-          })
-          return { levels: updatedLevels, totalXP: newXP }
-        })
+          }),
+          totalXP: s.totalXP + xpEarned,
+        }))
+
+        window.scrollTo({ top: 0, behavior: 'smooth' })
 
         const xUserStr = localStorage.getItem('xUser')
         if (!xUserStr) return
         const xUser = JSON.parse(xUserStr)
 
-        console.log('[WenBrain] xUser from localStorage:', xUser)
+        // Read fresh state AFTER set() to get correct values
+        const fresh = get()
+        const newXP = fresh.totalXP
+        const newLevelsCompleted = fresh.levels.filter((l) => l.completed).length
+
+        console.log('[WenBrain] completeLevel posting:', { levelId, newXP, newLevelsCompleted })
 
         fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
           method: 'POST',
@@ -96,8 +95,8 @@ export const useGameStore = create(
           }),
         })
           .then((r) => r.json())
-          .then((d) => { console.log('[WenBrain] Leaderboard saved:', d); _inFlightLevels.delete(levelId) })
-          .catch((e) => { console.error('[WenBrain] Error:', e); _inFlightLevels.delete(levelId) })
+          .then((d) => console.log('[WenBrain] Leaderboard saved:', d))
+          .catch((e) => console.error('[WenBrain] Error:', e))
       },
 
       submitScoreToSupabase: async () => {
