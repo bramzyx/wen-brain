@@ -592,7 +592,7 @@ export default function Level5Page() {
             FTX. Terra Luna. BitConnect. $40 billion gone in 48 hours. Know these names. Never forget them.
           </p>
           <div className="flex gap-3 flex-wrap">
-            {[['300 Points base', ACCENT], ['+150 perfect bonus', '#FFD700'], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
+            {[['3 PTS base', ACCENT], ['+1 perfect bonus', '#FFD700'], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
               <span key={t} className="font-mono text-xs px-3 py-1 rounded-full" style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>
                 {t}
               </span>

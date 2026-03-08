@@ -623,7 +623,7 @@ export default function Level6Page() {
             A dog meme hit $90 billion. A frog hit $1 billion in 2 weeks. None of it makes sense. All of it happened.
           </p>
           <div className="flex gap-3 flex-wrap">
-            {[['300 Points base', ACCENT], ['+150 perfect bonus', GREEN], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
+            {[['3 PTS base', ACCENT], ['+1 perfect bonus', GREEN], ['~7 min read', 'var(--text-secondary)']].map(([t, c]) => (
               <span key={t} className="font-mono text-xs px-3 py-1 rounded-full" style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>
                 {t}
               </span>
