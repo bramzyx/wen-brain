@@ -16,14 +16,14 @@ function getSfx(name) {
   return sfxCache[name]
 }
 
-const playBg = () => {
+export const playBg = () => {
   const audio = document.getElementById('global-bg-music')
   if (!audio) return
   audio.volume = 0.2
   audio.play().catch(e => console.error('DOM Audio Error:', e))
 }
 
-const pauseBg = () => {
+export const pauseBg = () => {
   const audio = document.getElementById('global-bg-music')
   if (!audio) return
   audio.pause()
