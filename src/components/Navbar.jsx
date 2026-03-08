@@ -4,7 +4,7 @@ import { useSound } from '../hooks/useSound'
 import { startXLogin } from '../hooks/useXAuth'
 
 const XIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.213 5.567z" />
   </svg>
 )
@@ -34,80 +34,59 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b"
       style={{ background: 'rgba(8,11,17,0.85)', backdropFilter: 'blur(12px)', borderColor: 'var(--border)' }}>
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-        {/* Logo */}
+        
+        {/* Left Side: Logo */}
         <div className="flex items-center gap-4">
           <Link to="/" style={{ fontFamily: '"IBM Plex Mono", monospace', fontWeight: 700, letterSpacing: '0.06em', fontSize: '1.1rem', textDecoration: 'none' }}>
             <span style={{ color: 'var(--text-primary)' }}>WEN</span><span style={{ color: '#F7931A' }}>BRAIN</span>
           </Link>
         </div>
 
-        {/* Points display */}
-        <div className="hidden sm:block">
-          <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-            🧠 Points: <span style={{ color: '#F7931A' }}>{totalXP}</span>
+        {/* Middle: Points (Now visible on all screens) */}
+        <div className="flex items-center">
+          <span className="font-mono text-xs font-bold" style={{ color: '#F7931A' }}>
+            🧠 {totalXP} <span className="text-[10px] text-gray-500 ml-1">PTS</span>
           </span>
         </div>
 
-        {/* Right side: user + sound */}
-        <div className="flex items-center gap-2">
+        {/* Right Side: Social + User + Sound */}
+        <div className="flex items-center gap-3">
+          
+          {/* ALWAYS SHOW X FOLLOW BUTTON */}
+          <a 
+            href="https://x.com/wenbrain" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 bg-white text-black px-3 py-1 rounded-full text-[10px] font-bold hover:bg-gray-200 transition-colors"
+          >
+            <XIcon />
+            <span>Follow</span>
+          </a>
 
-          {/* X logged-in: avatar + @username + sign out */}
-          {xUser && (
+          {/* User Auth Section */}
+          {xUser ? (
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-2 py-1 rounded"
-                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+              <div className="hidden md:flex items-center gap-2 px-2 py-1 rounded border border-[#333] bg-[#111]">
                 {xUser.avatarUrl ? (
-                  <img
-                    src={xUser.avatarUrl}
-                    alt={xUser.username}
-                    className="w-6 h-6 rounded-full"
-                    style={{ objectFit: 'cover' }}
-                  />
+                  <img src={xUser.avatarUrl} alt={xUser.username} className="w-5 h-5 rounded-full" />
                 ) : (
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                    style={{ background: '#1DA1F2', color: '#fff' }}>
+                  <div className="w-5 h-5 rounded-full bg-[#1DA1F2] flex items-center justify-center text-[10px]">
                     {xUser.username[0].toUpperCase()}
                   </div>
                 )}
-                <span className="font-mono text-xs" style={{ color: '#00FF94' }}>
-                  @{xUser.username}
-                </span>
+                <span className="font-mono text-[10px] text-[#00FF94]">@{xUser.username}</span>
               </div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="font-mono text-xs px-2 py-1 rounded transition-opacity hover:opacity-70"
-                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
-                title="Sign out"
-              >
-                Sign out
+              <button onClick={handleLogout} className="text-[10px] text-gray-500 hover:text-white transition-colors">
+                Exit
               </button>
             </div>
-          )}
-
-          {/* Show Login with X whenever not logged in */}
-          {!xUser && (
+          ) : (
             <button
               type="button"
               onClick={handleXLogin}
-              className="flex items-center gap-1.5 font-mono text-xs px-3 py-1.5 rounded transition-all hover:opacity-80"
-              style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
+              className="font-mono text-[10px] px-3 py-1 rounded border border-[#333] bg-black text-white hover:bg-[#111]"
             >
-              <XIcon />
-              <span className="hidden sm:inline">Login with X</span>
-            </button>
-          )}
-
-          {/* Visitor sign out (exit visitor mode) */}
-          {isVisitor && !xUser && (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="hidden sm:block font-mono text-xs px-2 py-1 rounded transition-opacity hover:opacity-70"
-              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
-              title="Exit visitor mode"
-            >
-              Exit
+              Login
             </button>
           )}
 
@@ -115,9 +94,8 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => { play('click'); toggleSound() }}
-            className="w-8 h-8 rounded flex items-center justify-center text-sm transition-colors"
-            style={{ background: 'var(--bg-card)', color: soundEnabled ? '#F7931A' : 'var(--text-secondary)' }}
-            title={soundEnabled ? 'Sound ON' : 'Sound OFF'}
+            className="w-7 h-7 rounded flex items-center justify-center text-xs transition-colors bg-[#111]"
+            style={{ color: soundEnabled ? '#F7931A' : '#444' }}
           >
             {soundEnabled ? '🔊' : '🔇'}
           </button>
