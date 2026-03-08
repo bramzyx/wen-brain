@@ -35,7 +35,7 @@ export async function startXLogin() {
     code_challenge_method: 'S256',
   })
 
-  window.location.href = `https://twitter.com/i/oauth2/authorize?${params}&force_login=true`
+  window.location.href = `https://twitter.com/i/oauth2/authorize?${params}&force_login=true&prompt=login`
 }
 
 // Called from the /auth/callback route with code + state parsed from the hash fragment
