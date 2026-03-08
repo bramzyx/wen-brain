@@ -634,7 +634,7 @@ export default function Level4Page() {
             Not bad for a 2am shower thought.
           </p>
 
-          <LevelImage src="/images/solana_start.gif" alt="Solana origin story" />
+          <LevelImage src="/gifs/solana_start.gif" alt="Solana origin story" />
 
           <MemeQuote>"Built by an ex-Qualcomm engineer at 2am. Just like your startup idea."</MemeQuote>
         </SectionCard>
@@ -750,7 +750,7 @@ export default function Level4Page() {
             They were wrong.
           </p>
 
-          <LevelImage src="/images/ftx_crash.gif" alt="FTX collapse 2022" />
+          <LevelImage src="/gifs/ftx_crash.gif" alt="FTX collapse 2022" />
         </SectionCard>
 
         {/* ══════════════════ SECTION 4 ══════════════════ */}
@@ -864,7 +864,7 @@ export default function Level4Page() {
             ))}
           </div>
 
-          <LevelImage src="/images/solana_meme.gif" alt="Solana memecoin chaos" />
+          <LevelImage src="/gifs/solana_meme.gif" alt="Solana memecoin chaos" />
 
           <MemeQuote>
             "Solana: where tokens go from $0 to $100M to $0 again in 48 hours.

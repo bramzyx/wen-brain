@@ -666,7 +666,7 @@ export default function Level6Page() {
             </div>
           </div>
 
-          <LevelImage src="/images/doge_moon.gif" alt="Doge to the moon" />
+          <LevelImage src="/gifs/doge_moon.gif" alt="Doge to the moon" />
 
           <MemeQuote>Much wow. Very crypto. Such money.</MemeQuote>
 
@@ -746,7 +746,7 @@ export default function Level6Page() {
             ...and many more: POPCAT, FLOKI, BABYDOGE, MOG, BRETT and thousands of others. New ones launch every hour on Pump.fun.
           </p>
 
-          <LevelImage src="/images/memecoin_family.gif" alt="Memecoin family tree" />
+          <LevelImage src="/gifs/memecoin_family.gif" alt="Memecoin family tree" />
         </SectionCard>
 
         {/* ══════════════════ SECTION 3 ══════════════════ */}
@@ -797,7 +797,7 @@ export default function Level6Page() {
             ))}
           </div>
 
-          <LevelImage src="/images/pumpfun.gif" alt="Pump.fun memecoin chaos" />
+          <LevelImage src="/gifs/pumpfun.gif" alt="Pump.fun memecoin chaos" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -873,7 +873,7 @@ export default function Level6Page() {
 
           <MemeQuote>"Buy high sell low" — retail investor motto</MemeQuote>
 
-          <LevelImage src="/images/wagmi_ngmi.gif" alt="WAGMI vs NGMI" />
+          <LevelImage src="/gifs/wagmi_ngmi.gif" alt="WAGMI vs NGMI" />
 
           <CalloutBox>
             <p className="font-mono text-sm leading-relaxed" style={{ color: ACCENT }}>
@@ -924,7 +924,7 @@ export default function Level6Page() {
             ))}
           </div>
 
-          <LevelImage src="/images/degen_life.gif" alt="Degen life" />
+          <LevelImage src="/gifs/degen_life.gif" alt="Degen life" />
 
           <MemeQuote>
             "Memecoins are not investments.
