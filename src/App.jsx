@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
-import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Ticker from './components/Ticker'
 import LandingPage from './components/LandingPage'
@@ -85,6 +85,12 @@ function OAuthCallbackHandler() {
   )
 }
 
+// ── Auth guard — redirects to landing if no xUser in localStorage ────────────
+function RequireAuth({ children }) {
+  if (!localStorage.getItem('xUser')) return <Navigate to="/" replace />
+  return children
+}
+
 // ── Lazy level pages ─────────────────────────────────────────────────────────
 const GamePage    = lazy(() => import('./components/GamePage'))
 const Level1Page  = lazy(() => import('./components/Level1Page'))
@@ -127,17 +133,17 @@ export default function App() {
         <Routes>
           <Route path="/"         element={<LandingPage />} />
           <Route path="/game"     element={<GamePage />} />
-          <Route path="/level/1"  element={<Level1Page />} />
-          <Route path="/level/2"  element={<Level2Page />} />
-          <Route path="/level/3"  element={<Level3Page />} />
-          <Route path="/level/4"  element={<Level4Page />} />
-          <Route path="/level/5"  element={<Level5Page />} />
-          <Route path="/level/6"  element={<Level6Page />} />
-          <Route path="/level/7"  element={<Level7Page />} />
-          <Route path="/level/8"  element={<Level8Page />} />
-          <Route path="/level/9"  element={<Level9Page />} />
-          <Route path="/level/10" element={<Level10Page />} />
-          <Route path="/level/:id" element={<GamePage />} />
+          <Route path="/level/1"  element={<RequireAuth><Level1Page /></RequireAuth>} />
+          <Route path="/level/2"  element={<RequireAuth><Level2Page /></RequireAuth>} />
+          <Route path="/level/3"  element={<RequireAuth><Level3Page /></RequireAuth>} />
+          <Route path="/level/4"  element={<RequireAuth><Level4Page /></RequireAuth>} />
+          <Route path="/level/5"  element={<RequireAuth><Level5Page /></RequireAuth>} />
+          <Route path="/level/6"  element={<RequireAuth><Level6Page /></RequireAuth>} />
+          <Route path="/level/7"  element={<RequireAuth><Level7Page /></RequireAuth>} />
+          <Route path="/level/8"  element={<RequireAuth><Level8Page /></RequireAuth>} />
+          <Route path="/level/9"  element={<RequireAuth><Level9Page /></RequireAuth>} />
+          <Route path="/level/10" element={<RequireAuth><Level10Page /></RequireAuth>} />
+          <Route path="/level/:id" element={<RequireAuth><GamePage /></RequireAuth>} />
         </Routes>
       </Suspense>
 
