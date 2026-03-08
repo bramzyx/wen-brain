@@ -33,7 +33,7 @@ const OAUTH = getOAuthParams()
 
 // ── Loading screen + token exchange ─────────────────────────────────────────
 function OAuthCallbackHandler() {
-  const { setXUser, setPlayerName, submitToLeaderboard } = useGameStore()
+  const { setXUser, setPlayerName } = useGameStore()
   const navigate = useNavigate()
   const ran = useRef(false)
 
@@ -46,14 +46,14 @@ function OAuthCallbackHandler() {
       window.history.replaceState({}, '', window.location.pathname)
     }
 
-    handleXCallback(OAUTH.code, OAUTH.state).then((user) => {
+    const run = async () => {
+      const user = await handleXCallback(OAUTH.code, OAUTH.state)
       if (user) {
         console.log('[WenBrain] Saving xUser:', user)
         try { localStorage.setItem('xUser', JSON.stringify(user)) } catch {}
-        setXUser(user)
+        await setXUser(user)
         setPlayerName(user.username)
-        submitToLeaderboard(user.username)
-        
+
         // THE FIX: Force the browser to break out of the loading screen trap
         window.location.href = '/#/game'
         window.location.reload()
@@ -61,12 +61,13 @@ function OAuthCallbackHandler() {
         // Exchange failed — clean up PKCE so future logins work
         sessionStorage.removeItem('x_pkce_verifier')
         sessionStorage.removeItem('x_pkce_state')
-        
+
         // THE FIX: Return to home and reload
         window.location.href = '/'
         window.location.reload()
       }
-    })
+    }
+    run()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
