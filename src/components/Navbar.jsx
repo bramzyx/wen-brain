@@ -53,7 +53,7 @@ export default function Navbar() {
 
           {/* X logged-in: avatar + @username + sign out */}
           {xUser && (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-2 py-1 rounded"
                 style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                 {xUser.avatarUrl ? (
@@ -90,11 +90,11 @@ export default function Navbar() {
             <button
               type="button"
               onClick={handleXLogin}
-              className="hidden sm:flex items-center gap-1.5 font-mono text-xs px-3 py-1.5 rounded transition-all hover:opacity-80"
+              className="flex items-center gap-1.5 font-mono text-xs px-3 py-1.5 rounded transition-all hover:opacity-80"
               style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
             >
               <XIcon />
-              Login with X
+              <span className="hidden sm:inline">Login with X</span>
             </button>
           )}
 
