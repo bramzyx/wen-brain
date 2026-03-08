@@ -58,6 +58,7 @@ export const useGameStore = create(
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
       completeLevel: (levelId, score, xpEarned) => {
+        console.trace('[WenBrain] completeLevel TRACE', levelId, score, xpEarned)
         console.log('[WenBrain] completeLevel called:', levelId, score, xpEarned)
         const { totalXP, levels } = get()
         const alreadyCompleted = levels.find((l) => l.id === levelId)?.completed
