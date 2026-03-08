@@ -16,6 +16,10 @@ export default async (request, context) => {
       /<meta name="twitter:image"[^>]*>/g,
       `<meta name="twitter:image" content="${bannerUrl}" />`
     )
+    .replace(
+      /<meta property="og:url"[^>]*>/g,
+      `<meta property="og:url" content="https://wenbrain.com/level/${level}" />`
+    )
 
   return new Response(modified, html)
 }
