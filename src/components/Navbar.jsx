@@ -29,8 +29,8 @@ export default function Navbar() {
         {/* Left: Logo and Twitter Button */}
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/" className="flex items-center gap-1 no-underline">
-            <span className="font-mono font-bold text-lg tracking-tighter text-white glitch-text">WEN</span>
-            <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A] glitch-text" style={{ animationDelay: '1.5s' }}>BRAIN</span>
+            <span className="font-mono font-bold text-lg tracking-tighter text-white">WEN</span>
+            <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A]">BRAIN</span>
           </Link>
 
           {/* Dark X Follow Button with Glitch */}
