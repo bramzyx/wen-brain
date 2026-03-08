@@ -141,12 +141,12 @@ export default function Leaderboard({ limit = 3, full = false }) {
                       </div>
                     </div>
 
-                    {/* XP */}
+                    {/* Points */}
                     <div className="text-right flex-shrink-0">
                       <div className="font-syne font-bold text-lg" style={{ color: '#F7931A' }}>
                         {entry.xp.toLocaleString()}
                       </div>
-                      <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>XP</div>
+                      <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>pts</div>
                     </div>
                   </motion.div>
                 )
@@ -197,7 +197,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
                 @{entry.username || entry.name}
               </span>
               <span className="font-mono text-xs font-bold" style={{ color: '#F7931A' }}>
-                {entry.xp.toLocaleString()} XP
+                {entry.xp.toLocaleString()} pts
               </span>
             </motion.div>
           )

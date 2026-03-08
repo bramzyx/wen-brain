@@ -521,10 +521,10 @@ function QuizResults({ score, xp, attempt, maxAttempts, totalXP, tweet, onNext, 
         )}
 
         <div className="font-mono text-sm mb-1 mt-3" style={{ color: ACCENT }}>
-          +{xp + tier.bonus} XP earned{tier.bonus > 0 ? ` (+${tier.bonus} ${isPerfect ? 'DEGEN' : 'bonus'})` : ''}
+          +{xp} Points earned
         </div>
         <div className="font-mono text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>
-          Total XP this session: {totalXP.toLocaleString()}
+          Total Points: {totalXP.toLocaleString()}
         </div>
         <div className="font-mono text-xs mb-8" style={{ color: 'var(--text-secondary)' }}>
           Attempt {attempt} of {maxAttempts}
@@ -630,20 +630,15 @@ export default function Level10Page() {
   const handleAnswer = (selectedIdx, timeLeft) => {
     const q = shuffledQuiz[currentQ]
     const correct = selectedIdx !== -1 && selectedIdx === q.correct
-    const baseXP = correct ? 100 : 0
-    const speedBonus = correct && timeLeft > 30 ? 50 : 0
-    const newAnswers = [...answers, { correct, xp: baseXP + speedBonus }]
+    const newAnswers = [...answers, { correct }]
     setAnswers(newAnswers)
 
     if (currentQ + 1 >= shuffledQuiz.length) {
       const score = newAnswers.filter((a) => a.correct).length
-      const xp = newAnswers.reduce((s, a) => s + a.xp, 0)
-      const tier = getTier(score)
-      const totalEarned = xp + tier.bonus
       setFinalScore(score)
-      setEarnedXP(totalEarned)
+      setEarnedXP(score)
       if (score >= 5) {
-        completeLevel(10, score, totalEarned)
+        completeLevel(10, score)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}
@@ -1118,15 +1113,9 @@ export default function Level10Page() {
           <p className="font-mono text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
             10 questions · All topics · 45 seconds each
           </p>
-          <p className="font-mono text-xs mb-6" style={{ color: ACCENT }}>
-            Answer under 15 seconds for speed bonus
-          </p>
           <div className="flex justify-center gap-6 mb-8 flex-wrap">
             {[
-              ['+100 XP', 'per correct', ACCENT],
-              ['+50 XP', 'speed bonus', '#FFA500'],
-              ['+500 XP', 'perfect score', ACCENT],
-              ['+200 XP', '8–9 correct', '#FFA500'],
+              ['+1 Point', 'per correct', ACCENT],
             ].map(([val, lbl, c]) => (
               <div key={lbl} className="text-center">
                 <div className="font-syne font-bold text-xl" style={{ color: c }}>{val}</div>

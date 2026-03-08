@@ -56,7 +56,7 @@ export const useGameStore = create(
 
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
 
-      completeLevel: (levelId, score, xpEarned) => {
+      completeLevel: (levelId, correctAnswers) => {
         const state = get()
         const level = state.levels.find((l) => l.id === levelId)
         if (!level || level.completed) return
@@ -64,11 +64,11 @@ export const useGameStore = create(
         // Immediately mark completed in state to block any second call
         set((s) => ({
           levels: s.levels.map((l) => {
-            if (l.id === levelId) return { ...l, completed: true, score, xpEarned, badge: score === 3 ? 'WAGMI' : null }
+            if (l.id === levelId) return { ...l, completed: true, score: correctAnswers, xpEarned: correctAnswers, badge: correctAnswers === 3 ? 'WAGMI' : null }
             if (l.id === levelId + 1) return { ...l, unlocked: true }
             return l
           }),
-          totalXP: s.totalXP + xpEarned,
+          totalXP: s.totalXP + correctAnswers,
         }))
 
         window.scrollTo({ top: 0, behavior: 'smooth' })

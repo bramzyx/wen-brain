@@ -148,7 +148,7 @@ export default function GamePage() {
             </h1>
             {playerName && (
               <p className="font-mono text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                gm, <span style={{ color: '#00FF94' }}>{playerName}</span> — {totalXP.toLocaleString()} XP
+                gm, <span style={{ color: '#00FF94' }}>{playerName}</span> — {totalXP.toLocaleString()} pts
               </p>
             )}
           </div>
@@ -373,7 +373,7 @@ export default function GamePage() {
                 Replay from beginning ↺
               </button>
               <p className="font-mono text-xs" style={{ color: 'var(--text-secondary)', opacity: 0.6 }}>
-                Your leaderboard score is saved. XP resets to 0.
+                Your leaderboard score is saved. Points reset to 0.
               </p>
             </div>
           )}

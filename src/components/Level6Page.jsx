@@ -396,10 +396,10 @@ function QuizResults({ score, xp, attempt, maxAttempts, totalXP, tweet, onNext, 
         {isWagmi ? 'WAGMI SER 🚀' : passed ? 'Not bad, anon.' : 'ngmi... for now.'}
       </div>
       <div className="font-mono text-sm mb-1" style={{ color: GREEN }}>
-        +{xp} XP earned{isWagmi ? ' + 150 WAGMI bonus!' : ''}
+        +{xp} Points earned
       </div>
       <div className="font-mono text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>
-        Total XP: {totalXP.toLocaleString()}
+        Total Points: {totalXP.toLocaleString()}
       </div>
       <div className="font-mono text-xs mb-8" style={{ color: 'var(--text-secondary)' }}>
         Attempt {attempt} of {maxAttempts}
@@ -504,18 +504,15 @@ export default function Level6Page() {
   const handleAnswer = (selectedIdx, timeLeft) => {
     const q = shuffledQuiz[currentQ]
     const correct = selectedIdx !== -1 && selectedIdx === q.correct
-    const baseXP = correct ? 100 : 0
-    const speedBonus = correct && timeLeft > 20 ? 50 : 0
-    const newAnswers = [...answers, { correct, xp: baseXP + speedBonus }]
+    const newAnswers = [...answers, { correct }]
     setAnswers(newAnswers)
 
     if (currentQ + 1 >= shuffledQuiz.length) {
       const score = newAnswers.filter((a) => a.correct).length
-      const xp = newAnswers.reduce((s, a) => s + a.xp, 0)
       setFinalScore(score)
-      setEarnedXP(xp)
+      setEarnedXP(score)
       if (score >= 2) {
-        completeLevel(6, score, xp)
+        completeLevel(6, score)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}
@@ -954,10 +951,10 @@ export default function Level6Page() {
           <div style={{ fontSize: 48, marginBottom: 12 }}>🐸</div>
           <h2 className="font-syne font-black text-2xl mb-2" style={{ color: 'var(--text-primary)' }}>Quiz Time</h2>
           <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-            3 questions · 30 seconds each · Answer fast for speed bonus
+            3 questions · 30 seconds each
           </p>
           <div className="flex justify-center gap-8 mb-8">
-            {[['+100 XP', 'per correct', ACCENT], ['+50 XP', 'speed bonus', '#FF9900'], ['+150 XP', 'perfect score', GREEN]].map(([val, lbl, c]) => (
+            {[['+1 Point', 'per correct', ACCENT]].map(([val, lbl, c]) => (
               <div key={lbl} className="text-center">
                 <div className="font-syne font-bold text-xl" style={{ color: c }}>{val}</div>
                 <div className="font-mono text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{lbl}</div>

@@ -296,7 +296,7 @@ export default function LandingPage() {
             <div style={{ color: 'var(--border)' }}>|</div>
             <div className="text-center">
               <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-                XP EARNED TODAY
+                POINTS EARNED TODAY
               </div>
               <div className="font-syne font-bold text-lg" style={{ color: '#F7931A' }}>
                 {(fakeStats.xpToday + totalXP).toLocaleString()}
@@ -367,7 +367,7 @@ export default function LandingPage() {
                   @{(xUser || getSavedXUser()).username}
                 </div>
                 <div className="font-mono text-xs mt-1" style={{ color: '#00FF94' }}>
-                  {totalXP.toLocaleString()} XP total
+                  {totalXP.toLocaleString()} pts total
                 </div>
               </div>
             )}
@@ -434,7 +434,7 @@ export default function LandingPage() {
           viewport={{ once: true }}
         >
           <div className="text-center mb-8">
-            <div className="font-mono text-xs mb-2" style={{ color: '#F7931A' }}>RANKED BY XP</div>
+            <div className="font-mono text-xs mb-2" style={{ color: '#F7931A' }}>RANKED BY POINTS</div>
             <h2 className="font-syne font-black text-3xl" style={{ color: 'var(--text-primary)' }}>
               HALL OF BASED
             </h2>
