@@ -5,7 +5,8 @@
       "Bash(npm run dev)",
       "Bash(npm install @netlify/blobs)",
       "Bash(npm install @supabase/supabase-js)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(grep -l \"xpProgress\\\\|xpToNext\\\\|h-1\\\\.5.*XP\\\\|XP.*h-1\" dist/assets/*.js)"
     ]
   }
 }
