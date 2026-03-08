@@ -24,33 +24,35 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-[#080B11]/85 backdrop-blur-md border-[#1a1a1a]">
-      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between relative">
         
-        {/* Left: Logo */}
-        <Link to="/" className="flex items-center gap-2 no-underline">
-          <span className="font-mono font-bold text-lg tracking-tighter text-white">WENTEST</span>
-          <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A]">BRAIN</span>
-        </Link>
+        {/* Left: Logo and Twitter Button */}
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-1 no-underline">
+            <span className="font-mono font-bold text-lg tracking-tighter text-white glitch-text">WEN</span>
+            <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A] glitch-text" style={{ animationDelay: '1.5s' }}>BRAIN</span>
+          </Link>
 
-        {/* Middle: Clean Points Counter (NO PROGRESS BAR) */}
-        <div className="flex items-center gap-2 bg-[#111] px-3 py-1 rounded-full border border-[#222]">
-          <span className="text-xs font-mono text-[#F7931A] font-bold">🧠 {totalXP || 0} PTS</span>
-        </div>
-
-        {/* Right: Socials + Auth */}
-        <div className="flex items-center gap-3">
-          
-          {/* Twitter Follow Button - FORCED VISIBLE */}
           <a 
             href="https://x.com/wenbrain" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 bg-white text-black px-3 py-1 rounded-full text-[10px] font-bold hover:bg-gray-100 transition-all"
+            className="flex items-center gap-1.5 bg-white text-black px-3 py-1 rounded text-[10px] font-bold hover:bg-gray-200 transition-all"
           >
             <XIcon />
             <span>Follow</span>
           </a>
+        </div>
 
+        {/* Middle: Clean Points Counter */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+          <span className="text-xs font-mono font-bold" style={{ color: 'var(--text-secondary)' }}>
+            {totalXP || 0} <span style={{ color: '#F7931A' }}>PTS</span>
+          </span>
+        </div>
+
+        {/* Right: Auth + Sound */}
+        <div className="flex items-center gap-3">
           {xUser ? (
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-2 py-1 rounded bg-[#111] border border-[#222]">
