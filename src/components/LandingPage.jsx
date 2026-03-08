@@ -197,7 +197,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen relative" style={{ paddingTop: '84px' }}>
+    <div className="min-h-screen relative" style={{ paddingTop: '84px' }} onClick={() => { if (!soundEnabled) toggleSound() }}>
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4"
         style={{ minHeight: '100vh' }}>
 
