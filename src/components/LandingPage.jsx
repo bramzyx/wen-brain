@@ -77,17 +77,19 @@ function TypewriterSubtitle() {
 }
 
 function LoginModal({ onClose }) {
-  const { play } = useSound()
+  const { play, playBg } = useSound()
   const { setVisitor } = useGameStore()
   const navigate = useNavigate()
 
   const handleXLogin = async () => {
     play('click')
+    playBg('main')
     try { await startXLogin() } catch (_) {}
   }
 
   const handleVisitor = () => {
     play('click')
+    playBg('main')
     setVisitor()
     onClose()
     navigate('/game')
@@ -166,7 +168,7 @@ function getSavedXUser() {
 
 export default function LandingPage() {
   const { totalXP, xUser, isVisitor } = useGameStore()
-  const { play } = useSound()
+  const { play, playBg } = useSound()
   const navigate = useNavigate()
   const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
@@ -186,6 +188,7 @@ export default function LandingPage() {
 
   const handleStartClick = () => {
     play('click')
+    playBg('main')
     if (isLoggedIn) {
       navigate('/game')
     } else {
