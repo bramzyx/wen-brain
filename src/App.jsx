@@ -7,6 +7,7 @@ import SoundManager from './components/SoundManager'
 import Footer from './components/Footer'
 import { handleXCallback } from './hooks/useXAuth'
 import { useGameStore } from './store/useGameStore'
+import { bgAudio } from './hooks/useSound'
 
 // ── Detect OAuth code immediately, before React renders ──────────────────────
 // Covers two cases:
@@ -112,6 +113,16 @@ const Fallback = () => (
 )
 
 export default function App() {
+  const soundEnabled = useGameStore((s) => s.soundEnabled)
+
+  useEffect(() => {
+    if (soundEnabled) {
+      bgAudio.play().catch(e => console.error('BGM Error:', e))
+    } else {
+      bgAudio.pause()
+    }
+  }, [soundEnabled])
+
   // If an OAuth code was detected at load time, show the callback handler
   // before rendering anything else. HashRouter wraps it so useNavigate works.
   if (OAUTH) {

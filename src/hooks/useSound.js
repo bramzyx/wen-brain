@@ -17,9 +17,9 @@ function getSfx(name) {
 }
 
 // Background music singleton — lives outside React lifecycle
-const bgAudio = new Audio('/sounds/bg-lofi.mp3')
+export const bgAudio = new Audio('/sounds/bg-lofi.mp3')
 bgAudio.loop = true
-bgAudio.volume = 0.18
+bgAudio.volume = 0.5
 
 export function useSound() {
   const soundEnabled = useGameStore((s) => s.soundEnabled)
@@ -34,24 +34,13 @@ export function useSound() {
   )
 
   // ── Background music ─────────────────────────────────────────────────────
-  const playBg = useCallback(
-    () => {
-      bgAudio.play().catch(error => console.error('BGM Play Error:', error))
-    },
-    []
-  )
+  const playBg = useCallback(() => {
+    bgAudio.play().catch(error => console.error('BGM Play Error:', error))
+  }, [])
 
   const stopBg = useCallback(() => {
     bgAudio.pause()
-    bgAudio.currentTime = 0
   }, [])
 
-  const switchBg = useCallback(
-    (_track) => {
-      playBg()
-    },
-    [playBg]
-  )
-
-  return { play, playBg, stopBg, switchBg }
+  return { play, playBg, stopBg }
 }
