@@ -24,7 +24,7 @@ export const useGameStore = create(
       isVisitor: false, // guest mode — levels 1-3 only, no leaderboard
 
       // UI
-      soundEnabled: true,
+      soundEnabled: false,
       musicEnabled: false,
 
       // Leaderboard
