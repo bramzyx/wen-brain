@@ -171,7 +171,7 @@ export default function LandingPage() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const levelMapRef = useRef(null)
 
-  const isLoggedIn = !!(xUser || getSavedXUser() || isVisitor)
+  const isLoggedIn = !!(xUser || getSavedXUser())
 
   useEffect(() => {
     if (xUser && showLoginModal) setShowLoginModal(false)
