@@ -85,8 +85,8 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Visitor mode: show Login with X button */}
-          {isVisitor && !xUser && (
+          {/* Show Login with X whenever not logged in */}
+          {!xUser && (
             <button
               type="button"
               onClick={handleXLogin}
