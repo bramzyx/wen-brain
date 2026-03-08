@@ -27,20 +27,21 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between relative">
         
         {/* Left: Logo and Twitter Button */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/" className="flex items-center gap-1 no-underline">
             <span className="font-mono font-bold text-lg tracking-tighter text-white glitch-text">WEN</span>
             <span className="font-mono font-bold text-lg tracking-tighter text-[#F7931A] glitch-text" style={{ animationDelay: '1.5s' }}>BRAIN</span>
           </Link>
 
+          {/* Dark X Follow Button with Glitch */}
           <a 
             href="https://x.com/wenbrain" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 bg-white text-black px-3 py-1 rounded text-[10px] font-bold hover:bg-gray-200 transition-all"
+            className="flex items-center gap-1.5 bg-black text-white border border-[#333] px-2 py-1 sm:px-3 sm:py-1 rounded text-[10px] font-mono hover:bg-[#111] transition-all"
           >
             <XIcon />
-            <span>Follow</span>
+            <span className="glitch-text" style={{ animationDelay: '0.5s' }}>Follow</span>
           </a>
         </div>
 
