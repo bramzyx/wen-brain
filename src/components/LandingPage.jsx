@@ -78,23 +78,21 @@ function TypewriterSubtitle() {
 
 function LoginModal({ onClose }) {
   const { play, playBg } = useSound()
-  const { setVisitor, soundEnabled, toggleSound } = useGameStore()
+  const { setVisitor } = useGameStore()
   const navigate = useNavigate()
 
   const handleXLogin = async () => {
     play('click')
-    if (!soundEnabled) toggleSound()
-    playBg()
     try { await startXLogin() } catch (_) {}
+    setTimeout(() => { playBg() }, 300)
   }
 
   const handleVisitor = () => {
     play('click')
-    if (!soundEnabled) toggleSound()
-    playBg()
     setVisitor()
     onClose()
     navigate('/game')
+    setTimeout(() => { playBg() }, 300)
   }
 
   return createPortal(
