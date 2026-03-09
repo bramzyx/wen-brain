@@ -16,17 +16,26 @@ function getSfx(name) {
   return sfxCache[name]
 }
 
+let bgAudio = null
+
 export const playBg = () => {
-  const audio = document.getElementById('global-bg-music')
-  if (!audio) return
-  audio.volume = 0.2
-  audio.play().catch(e => console.error('DOM Audio Error:', e))
+  if (!bgAudio) {
+    bgAudio = new Audio('/sounds/bg-lofi.mp3')
+    bgAudio.loop = true
+    bgAudio.volume = 0.5
+  }
+  const playPromise = bgAudio.play()
+  if (playPromise !== undefined) {
+    playPromise.catch(error => {
+      console.error('BGM Error (Firefox/Brave block):', error)
+    })
+  }
 }
 
 export const pauseBg = () => {
-  const audio = document.getElementById('global-bg-music')
-  if (!audio) return
-  audio.pause()
+  if (bgAudio) {
+    bgAudio.pause()
+  }
 }
 
 export function useSound() {
