@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 import { useGameStore } from '../store/useGameStore'
 
 // SFX cache — loaded on first play, shared across components
@@ -16,26 +16,24 @@ function getSfx(name) {
   return sfxCache[name]
 }
 
-let bgAudio = null
+const bgMusic = new Howl({
+  src: ['/sounds/bg-lofi.mp3'],
+  loop: true,
+  volume: 0.5,
+  html5: false,
+})
 
 export const playBg = () => {
-  if (!bgAudio) {
-    bgAudio = new Audio('/sounds/bg-lofi.mp3')
-    bgAudio.loop = true
-    bgAudio.volume = 0.5
+  if (Howler.ctx && Howler.ctx.state === 'suspended') {
+    Howler.ctx.resume()
   }
-  const playPromise = bgAudio.play()
-  if (playPromise !== undefined) {
-    playPromise.catch(error => {
-      console.error('BGM Error (Firefox/Brave block):', error)
-    })
+  if (!bgMusic.playing()) {
+    bgMusic.play()
   }
 }
 
 export const pauseBg = () => {
-  if (bgAudio) {
-    bgAudio.pause()
-  }
+  bgMusic.pause()
 }
 
 export function useSound() {
