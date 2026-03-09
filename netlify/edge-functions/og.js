@@ -1,13 +1,24 @@
 export default async (request, context) => {
-  const url = new URL(request.url)
-  const match = url.pathname.match(/\/level\/(\d+)/)
-  const level = match ? match[1] : '1'
-  const bannerUrl = `https://wenbrain.com/banners/banner_level${level}.png`
-  const html = await context.next()
-  const text = await html.text()
-  const modified = text
-    .replace(/<meta property="og:image"[^>]*>/g, `<meta property="og:image" content="${bannerUrl}" />`)
-    .replace(/<meta name="twitter:image"[^>]*>/g, `<meta name="twitter:image" content="${bannerUrl}" />`)
-  return new Response(modified, html)
-}
-export const config = { path: "/level/:id" }
+  const response = await context.next();
+  let page = await response.text();
+
+  const url = new URL(request.url);
+  const match = url.pathname.match(/\/level\/(\d+)/);
+
+  if (match) {
+    const level = match[1]; 
+    
+    // NOTE: Change "level${level}.png" if your images are named differently in public/images!
+    const imageUrl = `https://wenbrain.com/banners/banner_level${level}.png`;
+
+    const ogTags = `
+      <meta property="og:image" content="${imageUrl}" />
+      <meta name="twitter:image" content="${imageUrl}" />
+      <meta name="twitter:card" content="summary_large_image" />
+    `;
+    
+    page = page.replace('</head>', `${ogTags}</head>`);
+  }
+
+  return new Response(page, response);
+};

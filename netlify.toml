@@ -22,3 +22,7 @@
   status = 200
 
 # force deploy
+
+[[edge_functions]]
+  path = "/level/*"
+  function = "og"
