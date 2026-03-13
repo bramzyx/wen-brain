@@ -45,7 +45,7 @@ function ConfettiBurst() {
   )
 }
 
-function QuizQuestion({ q, qIndex, total, onPick }) {
+function QuizQuestion({ q, qIndex, total, onPick, onNext }) {
   const [picked, setPicked] = useState(null)
   const [timeLeft, setTimeLeft] = useState(30)
   const timerRef = useRef(null)
@@ -123,6 +123,18 @@ function QuizQuestion({ q, qIndex, total, onPick }) {
           </motion.div>
         )}
       </AnimatePresence>
+      {(picked !== null || timeLeft === 0) && (
+        <motion.button
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          type="button"
+          onClick={onNext}
+          className="w-full mt-4 p-3 rounded-xl font-syne font-bold text-sm"
+          style={{ background: ACCENT, color: '#000', cursor: 'pointer' }}
+        >
+          {qIndex + 1 >= total ? 'See Results →' : 'Next Question →'}
+        </motion.button>
+      )}
     </motion.div>
   )
 }
@@ -188,25 +200,26 @@ export default function VocabLevel3Page() {
     } else {
       try { play('wrong') } catch (_) {}
     }
-    const newAnswers = [...answers, { correct }]
-    setTimeout(() => {
-      setAnswers(newAnswers)
-      if (currentQ + 1 >= QUIZ.length) {
-        const score = newAnswers.filter((a) => a.correct).length
-        const alreadyCompleted = vocabLevels.find((l) => l.id === VOL)?.completed
-        const pts = alreadyCompleted ? 0 : score + (score === 5 ? 1 : 0)
-        setFinalScore(score)
-        setEarnedPts(pts)
-        if (!alreadyCompleted) {
-          try { addXP(pts) } catch (_) {}
-          try { completeVocabLevel(VOL, score) } catch (_) {}
-        }
-        try { play('levelup') } catch (_) {}
-        setPhase('results')
-      } else {
-        setCurrentQ((c) => c + 1)
+    setAnswers((prev) => [...prev, { correct }])
+  }
+
+  const handleNext = () => {
+    const newAnswers = [...answers]
+    if (currentQ + 1 >= QUIZ.length) {
+      const score = newAnswers.filter((a) => a.correct).length
+      const alreadyCompleted = vocabLevels.find((l) => l.id === VOL)?.completed
+      const pts = alreadyCompleted ? 0 : score + (score === 5 ? 1 : 0)
+      setFinalScore(score)
+      setEarnedPts(pts)
+      if (!alreadyCompleted) {
+        try { addXP(pts) } catch (_) {}
+        try { completeVocabLevel(VOL, score) } catch (_) {}
       }
-    }, 1200)
+      try { play('levelup') } catch (_) {}
+      setPhase('results')
+    } else {
+      setCurrentQ((c) => c + 1)
+    }
   }
 
   const handleRetry = () => {
@@ -267,7 +280,7 @@ export default function VocabLevel3Page() {
                   <div className="font-mono text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{currentQ + 1} / {QUIZ.length}</div>
                 </div>
                 <AnimatePresence mode="wait">
-                  <QuizQuestion key={currentQ} q={QUIZ[currentQ]} qIndex={currentQ} total={QUIZ.length} onPick={handlePick} />
+                  <QuizQuestion key={currentQ} q={QUIZ[currentQ]} qIndex={currentQ} total={QUIZ.length} onPick={handlePick} onNext={handleNext} />
                 </AnimatePresence>
               </div>
             </motion.div>
