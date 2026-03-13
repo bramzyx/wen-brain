@@ -207,8 +207,8 @@ export default function VocabLevel6Page() {
       setFinalScore(score)
       setEarnedPts(pts)
       if (!alreadyCompleted) {
-        try { addXP(pts) } catch (_) {}
         try { completeVocabLevel(VOL, score) } catch (_) {}
+        try { addXP(pts) } catch (_) {}
       }
       try { play('levelup') } catch (_) {}
       setPhase('results')
