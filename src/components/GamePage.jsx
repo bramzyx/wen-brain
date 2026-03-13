@@ -24,12 +24,12 @@ const LEVELS = [
 ]
 
 const VOCAB_LEVELS = [
-  { id: 1, emoji: '🧠', short: 'The Basics',      desc: 'HODL, FOMO, FUD, DYOR, NFA' },
-  { id: 2, emoji: '📉', short: 'Trading Talk',    desc: 'Pump, Dump, Rug pull, Moon, Rekt' },
-  { id: 3, emoji: '🐸', short: 'Community Slang', desc: 'Degen, Ape in, Wagmi, Ngmi, Gm' },
-  { id: 4, emoji: '⚙️', short: 'Technical Terms', desc: 'CA, Wallet, Gas, Seed phrase, Bridge' },
-  { id: 5, emoji: '💎', short: 'Meme Culture',    desc: 'Diamond hands, Paper hands, Wen moon, Chad, Normie' },
-  { id: 6, emoji: '🎯', short: 'Advanced Degen',  desc: 'Alpha, Shill, Ser, Fren, CT' },
+  { id: 1, emoji: '🧠', short: 'The Basics',      desc: 'HODL, FOMO, FUD, DYOR, NFA',                                color: '#00FF94' },
+  { id: 2, emoji: '📉', short: 'Trading Talk',    desc: 'Pump, Dump, Rug pull, Moon, Rekt',                          color: '#FF3366' },
+  { id: 3, emoji: '🐸', short: 'Community Slang', desc: 'Degen, Ape in, Wagmi, Ngmi, Gm',                           color: '#FFD700' },
+  { id: 4, emoji: '⚙️', short: 'Technical Terms', desc: 'CA, Wallet, Gas, Seed phrase, Bridge',                     color: '#627EEA' },
+  { id: 5, emoji: '💎', short: 'Meme Culture',    desc: 'Diamond hands, Paper hands, Wen moon, Chad, Normie',       color: '#9945FF' },
+  { id: 6, emoji: '🎯', short: 'Advanced Degen',  desc: 'Alpha, Shill, Ser, Fren, CT',                              color: '#F7931A' },
 ]
 
 function hexToRgb(hex) {
@@ -232,16 +232,17 @@ export default function GamePage() {
                 key={lvl.id}
                 onClick={() => { play('click'); navigate(`/vocab/${lvl.id}`) }}
                 className="relative rounded-xl border p-5 transition-all"
-                style={{ background: 'var(--bg-card)', borderColor: 'rgba(0,255,148,0.25)', cursor: 'pointer' }}
-                whileHover={{ scale: 1.02, borderColor: '#00FF94' }}
+                style={{ background: 'var(--bg-card)', borderColor: `${lvl.color}44`, cursor: 'pointer' }}
+                whileHover={{ scale: 1.02, borderColor: lvl.color }}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: 'rgba(0,255,148,0.08)', color: '#00FF94', borderColor: 'rgba(0,255,148,0.3)' }}>
+                  <span className="font-mono text-[10px] px-2 py-0.5 rounded border"
+                    style={{ background: `${lvl.color}18`, color: lvl.color, borderColor: `${lvl.color}44` }}>
                     VOL. {lvl.id}
                   </span>
                   <span className="text-xl">{lvl.emoji}</span>
                 </div>
-                <div className="font-mono text-[10px] mb-1" style={{ color: '#00FF94' }}>VOCAB · 5 QS</div>
+                <div className="font-mono text-[10px] mb-1" style={{ color: lvl.color }}>5 QUESTIONS</div>
                 <h3 className="font-syne font-bold text-base leading-tight text-white">{lvl.short}</h3>
                 <p className="font-mono text-xs text-gray-400">{lvl.desc}</p>
               </motion.div>
