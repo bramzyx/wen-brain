@@ -9,7 +9,7 @@ const VOL = 5
 const EMOJI = '💎'
 const TITLE = 'Meme Culture'
 const SUBTITLE = 'Diamond Hands, Paper Hands, Wen Moon, Chad, Normie — the memes that define crypto culture.'
-const GIF = '/images/vocab_diamond.gif'
+const GIF = '/images/doge_culture.gif'
 const NEXT_ROUTE = '/vocab/6'
 
 const TERMS = [

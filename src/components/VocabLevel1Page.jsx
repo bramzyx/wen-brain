@@ -9,7 +9,7 @@ const VOL = 1
 const EMOJI = '🧠'
 const TITLE = 'The Basics'
 const SUBTITLE = 'HODL, FOMO, FUD, DYOR, NFA — the words every degen must know.'
-const GIF = '/images/vocab_hodl.gif'
+const GIF = '/images/emotion_basics.gif'
 const NEXT_ROUTE = '/vocab/2'
 
 const TERMS = [

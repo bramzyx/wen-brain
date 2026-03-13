@@ -9,7 +9,7 @@ const VOL = 3
 const EMOJI = '🐸'
 const TITLE = 'Community Slang'
 const SUBTITLE = 'Degen, Ape in, WAGMI, NGMI, GM — the language of crypto Twitter.'
-const GIF = '/images/vocab_wagmi.gif'
+const GIF = '/images/wagmi_community.gif'
 const NEXT_ROUTE = '/vocab/4'
 
 const TERMS = [

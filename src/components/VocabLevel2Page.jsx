@@ -9,7 +9,7 @@ const VOL = 2
 const EMOJI = '📉'
 const TITLE = 'Trading Talk'
 const SUBTITLE = 'Pump, Dump, Rug pull, Moon, Rekt — survival vocabulary for the trenches.'
-const GIF = '/images/vocab_rekt.gif'
+const GIF = '/images/pump_trading.gif'
 const NEXT_ROUTE = '/vocab/3'
 
 const TERMS = [

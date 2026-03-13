@@ -9,7 +9,7 @@ const VOL = 6
 const EMOJI = '🎯'
 const TITLE = 'Advanced Degen'
 const SUBTITLE = 'Alpha, Shill, Ser, Fren, CT — the language of the inner circle. Final vocab level, ser.'
-const GIF = '/images/vocab_alpha.gif'
+const GIF = '/images/mindset_degen.gif'
 
 const TERMS = [
   { word: 'ALPHA', meaning: 'Exclusive early information or insight that gives an edge over the crowd. Protect it.', tweet: '"Got some alpha on this new L2. Not sharing tho. Protect the alpha."', color: '#F7931A' },

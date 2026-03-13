@@ -9,7 +9,7 @@ const VOL = 4
 const EMOJI = '⚙️'
 const TITLE = 'Technical Terms'
 const SUBTITLE = 'CA, Gas, Seed Phrase, Wallet, Bridge — the mechanics every anon must understand.'
-const GIF = '/images/vocab_gas.gif'
+const GIF = '/images/seed_tehnical.gif'
 const NEXT_ROUTE = '/vocab/5'
 
 const TERMS = [
