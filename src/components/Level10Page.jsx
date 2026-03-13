@@ -640,7 +640,7 @@ export default function Level10Page() {
       setFinalScore(score)
       setEarnedXP(xp)
       if (score >= 5) {
-        completeLevel(10, score)
+        completeLevel(10, xp)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}

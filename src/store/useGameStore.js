@@ -106,11 +106,11 @@ export const useGameStore = create(
         // Immediately mark completed in state to block any second call
         set((s) => ({
           levels: s.levels.map((l) => {
-            if (l.id === levelId) return { ...l, completed: true, score: correctAnswers, xpEarned: correctAnswers, badge: correctAnswers === 3 ? 'WAGMI' : null }
+            if (l.id === levelId) return { ...l, completed: true, score: correctAnswers <= 3 ? correctAnswers : correctAnswers - 1, xpEarned: correctAnswers, badge: correctAnswers >= 3 ? 'WAGMI' : null }
             if (l.id === levelId + 1) return { ...l, unlocked: true }
             return l
           }),
-          totalXP: s.totalXP + correctAnswers + (correctAnswers === 3 ? 1 : 0),
+          totalXP: s.totalXP + correctAnswers,
         }))
 
         window.scrollTo({ top: 0, behavior: 'smooth' })
