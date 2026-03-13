@@ -134,7 +134,7 @@ export default function GamePage() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-4 pt-8 pb-6">
+      <div className="max-w-6xl mx-auto px-4 pt-8 pb-24">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-center sm:text-left">
           <div>
             <button
