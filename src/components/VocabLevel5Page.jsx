@@ -137,7 +137,9 @@ function QuizResults({ score, earnedPts, onRetry, onNext, isLast }) {
       <div className="font-syne font-bold text-xl mb-2" style={{ color: perfect ? '#FFD700' : score >= 3 ? ACCENT : '#FF3366' }}>
         {perfect ? 'WAGMI SER 🚀 Perfect score!' : score >= 3 ? 'Not bad, anon.' : 'ngmi... for now.'}
       </div>
-      <div className="font-mono text-sm mb-8" style={{ color: ACCENT }}>+{earnedPts} PTS earned</div>
+      <div className="font-mono text-sm mb-6" style={{ color: ACCENT }}>
+        {earnedPts > 0 ? `+${earnedPts} PTS earned` : 'Already completed — no extra PTS'}
+      </div>
       <div className="flex flex-col gap-3 items-center">
         {isLast ? (
           <button type="button" onClick={() => navigate('/game')} className="btn-primary px-8 py-3 w-full sm:w-auto" style={{ background: `linear-gradient(135deg,${ACCENT},${ACCENT}bb)`, color: '#fff', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>Back to Journey Map 🗺️</button>
@@ -154,11 +156,20 @@ function QuizResults({ score, earnedPts, onRetry, onNext, isLast }) {
 export default function VocabLevel5Page() {
   const navigate = useNavigate()
   const { play } = useSound()
-  const { addXP, isVisitor } = useGameStore()
+  const { addXP, isVisitor, xUser, vocabLevels, completeVocabLevel } = useGameStore()
 
   useEffect(() => {
     if (!localStorage.getItem('xUser') && !isVisitor) navigate('/')
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!xUser) navigate('/game')
+  }, [xUser])
+
+  useEffect(() => {
+    const thisLevel = vocabLevels.find((l) => l.id === VOL)
+    if (thisLevel && !thisLevel.unlocked) navigate('/game')
+  }, [vocabLevels])
 
   const [phase, setPhase] = useState('learn')
   const [currentQ, setCurrentQ] = useState(0)
@@ -182,10 +193,14 @@ export default function VocabLevel5Page() {
       setAnswers(newAnswers)
       if (currentQ + 1 >= QUIZ.length) {
         const score = newAnswers.filter((a) => a.correct).length
-        const pts = score + (score === 5 ? 1 : 0)
+        const alreadyCompleted = vocabLevels.find((l) => l.id === VOL)?.completed
+        const pts = alreadyCompleted ? 0 : score + (score === 5 ? 1 : 0)
         setFinalScore(score)
         setEarnedPts(pts)
-        addXP(pts)
+        if (!alreadyCompleted) {
+          try { addXP(pts) } catch (_) {}
+          try { completeVocabLevel(VOL, score) } catch (_) {}
+        }
         try { play('levelup') } catch (_) {}
         setPhase('results')
       } else {
