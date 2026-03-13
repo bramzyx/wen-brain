@@ -16,7 +16,7 @@ const TERMS = [
   { word: 'DEGEN', meaning: 'Degenerate — a high-risk trader who apes into plays without much research. Worn as a badge of honor.', tweet: '"Full degen energy today. Aped into 5 projects before breakfast. WAGMI."', color: '#FF3366' },
   { word: 'APE IN', meaning: 'To buy heavily into something without doing much research. Vibes-based investing.', tweet: '"New project dropped the CA. No whitepaper. Already aped in. NFA."', color: '#F7931A' },
   { word: 'WAGMI', meaning: 'We All Gonna Make It — collective crypto optimism. The battle cry.', tweet: '"Bear market? WAGMI. Down 90%? WAGMI. Rug pulled? WAGMI."', color: '#FFD700' },
-  { word: 'NGMI', meaning: "Not Gonna Make It — used when someone makes a bad decision. The opposite of WAGMI.", tweet: '"Sold at $10. Now it's $1000. Absolute NGMI ser."', color: '#FF3366' },
+  { word: 'NGMI', meaning: "Not Gonna Make It — used when someone makes a bad decision. The opposite of WAGMI.", tweet: "\u201cSold at $10. Now it\u2019s $1000. Absolute NGMI ser.\u201d", color: '#FF3366' },
   { word: 'GM', meaning: "Good Morning — the crypto community's daily ritual of positivity and solidarity.", tweet: '"GM frens 🌅 (mandatory. this is the law of the blockchain.)"', color: '#00FF94' },
 ]
 
