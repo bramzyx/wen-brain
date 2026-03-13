@@ -92,7 +92,7 @@ function VisitorUpgradeModal({ onClose }) {
 
 export default function GamePage() {
   const navigate = useNavigate()
-  const { playerName, totalXP, levels, xUser, isVisitor, resetProgress, submitToLeaderboard } = useGameStore()
+  const { playerName, totalXP, levels, xUser, isVisitor, resetProgress, submitToLeaderboard, vocabLevels } = useGameStore()
   const { play } = useSound()
   const [showUpgrade, setShowUpgrade] = useState(false)
 
@@ -236,10 +236,20 @@ export default function GamePage() {
                 whileHover={{ scale: 1.02, borderColor: lvl.color }}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[10px] px-2 py-0.5 rounded border"
-                    style={{ background: `${lvl.color}18`, color: lvl.color, borderColor: `${lvl.color}44` }}>
-                    VOL. {lvl.id}
-                  </span>
+                  {(() => {
+                    const vLevel = vocabLevels?.find((l) => l.id === lvl.id)
+                    const isCompleted = vLevel?.completed ?? false
+                    const score = vLevel?.score ?? 0
+                    return isCompleted ? (
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}22`, color: lvl.color, borderColor: lvl.color }}>
+                        ✓ {score}/5
+                      </span>
+                    ) : (
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}18`, color: lvl.color, borderColor: `${lvl.color}44` }}>
+                        VOL. {lvl.id}
+                      </span>
+                    )
+                  })()}
                   <span className="text-xl">{lvl.emoji}</span>
                 </div>
                 <div className="font-mono text-[10px] mb-1" style={{ color: lvl.color }}>5 QUESTIONS</div>

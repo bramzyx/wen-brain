@@ -493,7 +493,7 @@ export default function Level7Page() {
       setFinalScore(score)
       setEarnedXP(xp)
       if (score >= 2) {
-        completeLevel(7, xp)
+        completeLevel(7, score)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}

@@ -488,7 +488,7 @@ export default function Level3Page() {
       setFinalScore(score)
       setEarnedXP(xp)
       if (score >= 2) {
-        completeLevel(3, xp)
+        completeLevel(3, score)
         submitToLeaderboard(playerName)
       }
       try { play('levelup') } catch (_) {}
