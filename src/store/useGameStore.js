@@ -13,6 +13,15 @@ const defaultLevels = Array.from({ length: LEVEL_COUNT }, (_, i) => ({
   badge: null,
 }))
 
+const VOCAB_LEVEL_COUNT = 6
+
+const defaultVocabLevels = Array.from({ length: VOCAB_LEVEL_COUNT }, (_, i) => ({
+  id: i + 1,
+  unlocked: i === 0,
+  completed: false,
+  score: 0,
+}))
+
 export const useGameStore = create(
   persist(
     (set, get) => ({
@@ -20,6 +29,7 @@ export const useGameStore = create(
       playerName: '',
       totalXP: 0,
       levels: defaultLevels,
+      vocabLevels: defaultVocabLevels,
       xUser: null,      // { username, displayName, avatarUrl, xId }
       isVisitor: false, // guest mode — levels 1-3 only, no leaderboard
 
@@ -68,11 +78,25 @@ export const useGameStore = create(
           playerName: '',
           totalXP: 0,
           levels: defaultLevels,
+          vocabLevels: defaultVocabLevels,
         })
       },
       clearXUser: () => set({ xUser: null, isVisitor: false, playerName: '' }),
 
       addXP: (amount) => set((s) => ({ totalXP: s.totalXP + amount })),
+
+      completeVocabLevel: (levelId, score) => {
+        const state = get()
+        const level = state.vocabLevels.find((l) => l.id === levelId)
+        if (!level || level.completed) return
+        set((s) => ({
+          vocabLevels: s.vocabLevels.map((l) => {
+            if (l.id === levelId) return { ...l, completed: true, score }
+            if (l.id === levelId + 1) return { ...l, unlocked: true }
+            return l
+          }),
+        }))
+      },
 
       completeLevel: (levelId, correctAnswers) => {
         const state = get()
@@ -213,6 +237,7 @@ export const useGameStore = create(
         set({
           totalXP: 0,
           levels: defaultLevels,
+          vocabLevels: defaultVocabLevels,
           xUser: null,
           playerName: '',
         }),
@@ -223,6 +248,7 @@ export const useGameStore = create(
         playerName: s.playerName,
         totalXP: s.totalXP,
         levels: s.levels,
+        vocabLevels: s.vocabLevels,
         leaderboard: s.leaderboard,
         soundEnabled: s.soundEnabled,
         musicEnabled: s.musicEnabled,
