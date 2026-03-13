@@ -227,36 +227,40 @@ export default function GamePage() {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {VOCAB_LEVELS.map((lvl) => (
-              <motion.div
-                key={lvl.id}
-                onClick={() => { play('click'); navigate(`/vocab/${lvl.id}`) }}
-                className="relative rounded-xl border p-5 transition-all"
-                style={{ background: 'var(--bg-card)', borderColor: `${lvl.color}44`, cursor: 'pointer' }}
-                whileHover={{ scale: 1.02, borderColor: lvl.color }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  {(() => {
-                    const vLevel = vocabLevels?.find((l) => l.id === lvl.id)
-                    const isCompleted = vLevel?.completed ?? false
-                    const score = vLevel?.score ?? 0
-                    return isCompleted ? (
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}22`, color: lvl.color, borderColor: lvl.color }}>
-                        ✓ {score}/5
-                      </span>
+            {VOCAB_LEVELS.map((lvl) => {
+              const vLevel = vocabLevels?.find((l) => l.id === lvl.id)
+              const isCompleted = vLevel?.completed ?? false
+              const isUnlocked = vLevel?.unlocked ?? lvl.id === 1
+              const score = vLevel?.score ?? 0
+              return (
+                <motion.div
+                  key={lvl.id}
+                  onClick={() => { if (!isUnlocked) return; play('click'); navigate(`/vocab/${lvl.id}`) }}
+                  className="relative rounded-xl border p-5 transition-all"
+                  style={{
+                    background: isUnlocked ? 'var(--bg-card)' : 'rgba(0,0,0,0.4)',
+                    borderColor: isCompleted ? lvl.color : isUnlocked ? `${lvl.color}44` : 'transparent',
+                    cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                    opacity: isUnlocked ? 1 : 0.5,
+                  }}
+                  whileHover={{ scale: isUnlocked ? 1.02 : 1, borderColor: isUnlocked ? lvl.color : 'transparent' }}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    {isCompleted ? (
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}22`, color: lvl.color, borderColor: lvl.color }}>✓ {score}/5</span>
+                    ) : isUnlocked ? (
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}18`, color: lvl.color, borderColor: `${lvl.color}44` }}>VOL. {lvl.id}</span>
                     ) : (
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: `${lvl.color}18`, color: lvl.color, borderColor: `${lvl.color}44` }}>
-                        VOL. {lvl.id}
-                      </span>
-                    )
-                  })()}
-                  <span className="text-xl">{lvl.emoji}</span>
-                </div>
-                <div className="font-mono text-[10px] mb-1" style={{ color: lvl.color }}>5 QUESTIONS</div>
-                <h3 className="font-syne font-bold text-base leading-tight text-white">{lvl.short}</h3>
-                <p className="font-mono text-xs text-gray-400">{lvl.desc}</p>
-              </motion.div>
-            ))}
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: 'rgba(0,0,0,0.3)', color: '#6B7280', borderColor: 'transparent' }}>🔒 LOCKED</span>
+                    )}
+                    <span className="text-xl">{lvl.emoji}</span>
+                  </div>
+                  <div className="font-mono text-[10px] mb-1" style={{ color: lvl.color }}>5 QUESTIONS</div>
+                  <h3 className="font-syne font-bold text-base leading-tight text-white">{lvl.short}</h3>
+                  <p className="font-mono text-xs text-gray-400">{lvl.desc}</p>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
 

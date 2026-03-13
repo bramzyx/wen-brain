@@ -110,7 +110,7 @@ export const useGameStore = create(
             if (l.id === levelId + 1) return { ...l, unlocked: true }
             return l
           }),
-          totalXP: s.totalXP + correctAnswers,
+          totalXP: s.totalXP + correctAnswers + (correctAnswers === 3 ? 1 : 0),
         }))
 
         window.scrollTo({ top: 0, behavior: 'smooth' })
