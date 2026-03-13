@@ -104,6 +104,12 @@ const Level7Page  = lazy(() => import('./components/Level7Page'))
 const Level8Page  = lazy(() => import('./components/Level8Page'))
 const Level9Page  = lazy(() => import('./components/Level9Page'))
 const Level10Page = lazy(() => import('./components/Level10Page'))
+const VocabLevel1Page = lazy(() => import('./components/VocabLevel1Page'))
+const VocabLevel2Page = lazy(() => import('./components/VocabLevel2Page'))
+const VocabLevel3Page = lazy(() => import('./components/VocabLevel3Page'))
+const VocabLevel4Page = lazy(() => import('./components/VocabLevel4Page'))
+const VocabLevel5Page = lazy(() => import('./components/VocabLevel5Page'))
+const VocabLevel6Page = lazy(() => import('./components/VocabLevel6Page'))
 
 const Fallback = () => (
   <div style={{ paddingTop: '120px', textAlign: 'center', color: '#F7931A', fontFamily: 'monospace' }}>
@@ -145,6 +151,12 @@ export default function App() {
           <Route path="/level/9"  element={<RequireAuth><Level9Page /></RequireAuth>} />
           <Route path="/level/10" element={<RequireAuth><Level10Page /></RequireAuth>} />
           <Route path="/level/:id" element={<RequireAuth><GamePage /></RequireAuth>} />
+          <Route path="/vocab/1" element={<Suspense fallback={<div />}><VocabLevel1Page /></Suspense>} />
+          <Route path="/vocab/2" element={<Suspense fallback={<div />}><VocabLevel2Page /></Suspense>} />
+          <Route path="/vocab/3" element={<Suspense fallback={<div />}><VocabLevel3Page /></Suspense>} />
+          <Route path="/vocab/4" element={<Suspense fallback={<div />}><VocabLevel4Page /></Suspense>} />
+          <Route path="/vocab/5" element={<Suspense fallback={<div />}><VocabLevel5Page /></Suspense>} />
+          <Route path="/vocab/6" element={<Suspense fallback={<div />}><VocabLevel6Page /></Suspense>} />
         </Routes>
       </Suspense>
 

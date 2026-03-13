@@ -1,0 +1,118 @@
+=== FILE: src/components/GamePage.jsx ===
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { useGameStore } from '../store/useGameStore'
+import { useSound } from '../hooks/useSound'
+import { startXLogin } from '../hooks/useXAuth'
+
+const VISITOR_LIMIT = 3
+
+const LEVELS = [
+  { id: 1,  title: 'In the Beginning: Bitcoin',         emoji: '🟠', color: '#F7931A', short: 'Bitcoin Basics',       desc: 'Money, trust, and the pizza guy' },
+  { id: 2,  title: 'Who is Satoshi?',                   emoji: '👻', color: '#FFD700', short: 'The Greatest Mystery',  desc: 'Person, group, or alien?' },
+  { id: 3,  title: 'The Kid Who Built Ethereum',         emoji: '💙', color: '#627EEA', short: 'Smart Contracts',       desc: 'What if Bitcoin could run code?' },
+  { id: 4,  title: 'Solana: Fast and Furious',           emoji: '⚡', color: '#9945FF', short: '65,000 TPS',            desc: 'The speed demon of blockchains' },
+  { id: 5,  title: 'Hall of Shame',                     emoji: '🤡', color: '#FF3366', short: 'Biggest Scams',         desc: 'FTX, Luna, Bitconnect HEEEY' },
+  { id: 6,  title: 'Memecoins: Joke to Millionaire',   emoji: '🐸', color: '#00CC44', short: 'DOGE to PEPE',           desc: 'From Shiba to $90B market caps' },
+  { id: 7,  title: 'Whales, Markets & Manipulation',   emoji: '🐋', color: '#0099FF', short: 'How It Really Works',  desc: "Wash trading, pump dumps, CT" },
+  { id: 8,  title: 'Tools of the Trade',                emoji: '🛠️', color: '#00FF94', short: 'Not Lose Everything',   desc: 'Wallets, DEX vs CEX' },
+  { id: 9,  title: "What's Happening NOW",              emoji: '🚀', color: '#E0E0E0', short: 'The Current Meta',      desc: 'ETF, halving, AI narrative' },
+  { id: 10, title: 'FINAL BOSS: WAGMI?',                emoji: '🏆', color: '#FFD700', short: 'Are You Ready?',         desc: 'All 10 topics. Full send.' },
+  { id: 11, comingSoon: true,                           emoji: '🌾', color: '#6B7280', short: 'DeFi Deep Dive',         desc: 'Yield farming, liquidity pools, rug pulls' },
+  { id: 12, comingSoon: true,                           emoji: '🤖', color: '#6B7280', short: 'The Future of Crypto',   desc: 'AI + crypto, CBDCs, what\'s next' },
+]
+
+// ... (full GamePage.jsx — journey/level map page)
+// Shows level grid, visitor banner, upgrade modal, handles level navigation
+
+
+=== FILE: src/components/Level1Page.jsx ===
+// Level 1: Bitcoin Basics
+// QUIZ data, story sections, quiz overlay, results screen
+// Key scoring logic in handleAnswer:
+
+const handleAnswer = (selectedIdx, timeLeft) => {
+  const q = shuffledQuiz[currentQ]
+  const correct = selectedIdx !== -1 && selectedIdx === q.correct
+  const baseXP = correct ? 1 : 0
+  const newAnswers = [...answers, { correct, xp: baseXP }]
+  setAnswers(newAnswers)
+
+  if (currentQ + 1 >= shuffledQuiz.length) {
+    const score = newAnswers.filter((a) => a.correct).length
+    const xp = newAnswers.reduce((s, a) => s + a.xp, 0) + (score === 3 ? 1 : 0)
+    setFinalScore(score)
+    setEarnedXP(xp)
+    if (score >= 2) {
+      completeLevel(1, xp)
+      submitToLeaderboard(playerName)
+    }
+    try { play('levelup') } catch (_) {}
+    setQuizPhase('results')
+  } else {
+    setCurrentQ((c) => c + 1)
+  }
+}
+// Points: 1 PT per correct answer, +1 PT perfect bonus (3/3)
+// Pass threshold: 2/3 correct
+// MAX_ATTEMPTS = 3
+
+
+=== FILE: src/App.jsx ===
+import { lazy, Suspense, useEffect, useRef } from 'react'
+import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Ticker from './components/Ticker'
+import LandingPage from './components/LandingPage'
+import SoundManager from './components/SoundManager'
+import Footer from './components/Footer'
+import { handleXCallback } from './hooks/useXAuth'
+import { useGameStore } from './store/useGameStore'
+
+// Routes:
+// / → LandingPage
+// /game → GamePage (journey map, no auth required)
+// /level/1-10 → Level pages (RequireAuth: needs xUser in localStorage OR isVisitor)
+// /level/:id → GamePage (fallback)
+
+// RequireAuth guard:
+function RequireAuth({ children }) {
+  const isVisitor = useGameStore((s) => s.isVisitor)
+  if (!localStorage.getItem('xUser') && !isVisitor) return <Navigate to="/" replace />
+  return children
+}
+
+// OAuthCallbackHandler: exchanges X OAuth code for user profile, saves to localStorage + Zustand
+// Redirects to /#/game on success, / on failure
+
+// All level routes use lazy() + Suspense for code splitting
+// <audio id="global-bg-music" src="/sounds/bg-lofi.mp3" loop preload="auto" /> at bottom of HashRouter
+
+
+=== FILE: src/store/useGameStore.js ===
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+// Key state:
+// playerName, totalXP, levels (array of 10), xUser, isVisitor
+// soundEnabled (default: false), musicEnabled
+// leaderboard (local top 10)
+
+// Key actions:
+// completeLevel(levelId, xp) — marks level complete, unlocks next, posts to Supabase
+// submitToLeaderboard(name) — deduplicates by xId, keeps top 10 locally
+// setXUser(user) — async: sets user, restores totalXP + levels from Supabase leaderboard
+// setVisitor() — sets isVisitor: true, xUser: null
+// logout() — clears localStorage + resets all state
+// toggleSound() — flips soundEnabled
+// toggleMusic() — flips musicEnabled
+
+// Scoring (per completeLevel call):
+// totalXP += correctAnswers (which already includes perfect bonus from level page)
+// level.score = correctAnswers
+// level.badge = 'WAGMI' if correctAnswers === 3
+
+// Persisted via Zustand persist middleware (key: 'wen-brain-save'):
+// playerName, totalXP, levels, leaderboard, soundEnabled, musicEnabled, xUser, isVisitor
