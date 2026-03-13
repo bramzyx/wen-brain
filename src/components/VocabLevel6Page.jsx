@@ -222,11 +222,7 @@ export default function VocabLevel6Page() {
 
         {phase === 'learn' && (
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            {GIF && (
-              <div className="mb-6 rounded-xl overflow-hidden" style={{ border: `1px solid ${ACCENT}33` }}>
-                <img src={GIF} alt="vocab visual" style={{ width: '100%', maxHeight: 220, objectFit: 'cover', display: 'block' }} />
-              </div>
-            )}
+
             <div className="flex flex-col gap-3 mb-8">
               {TERMS.map((t) => (
                 <motion.div key={t.word} whileHover={{ scale: 1.01 }} style={{ background: 'var(--bg-card)', border: `1px solid ${t.color}33`, borderLeft: `4px solid ${t.color}`, borderRadius: 10, padding: '16px 20px' }}>
