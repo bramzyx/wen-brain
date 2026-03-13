@@ -9,7 +9,7 @@ function getSfx(name) {
   if (!sfxCache[name]) {
     sfxCache[name] = new Howl({
       src: [`/sounds/${name}.mp3`],
-      volume: 0.65,
+      volume: 0.9,
       onloaderror: () => {},
     })
   }
@@ -19,7 +19,7 @@ function getSfx(name) {
 const bgMusic = new Howl({
   src: ['/sounds/bg-lofi.mp3'],
   loop: true,
-  volume: 0.5,
+  volume: 0.25,
   html5: false,
 })
 
