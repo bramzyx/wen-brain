@@ -23,14 +23,6 @@ const LEVELS = [
   { id: 12, comingSoon: true,                           emoji: '🤖', color: '#6B7280', short: 'The Future of Crypto',   desc: 'AI + crypto, CBDCs, what\'s next' },
 ]
 
-const VOCAB_LEVELS = [
-  { id: 1, emoji: '🧠', short: 'The Basics',      desc: 'HODL, FOMO, FUD, DYOR, NFA' },
-  { id: 2, emoji: '📉', short: 'Trading Talk',    desc: 'Pump, Dump, Rug pull, Moon, Rekt' },
-  { id: 3, emoji: '🐸', short: 'Community Slang', desc: 'Degen, Ape in, Wagmi, Ngmi, Gm' },
-  { id: 4, emoji: '⚙️', short: 'Technical Terms', desc: 'CA, Wallet, Gas, Seed phrase, Bridge' },
-  { id: 5, emoji: '💎', short: 'Meme Culture',    desc: 'Diamond hands, Paper hands, Wen moon, Chad, Normie' },
-  { id: 6, emoji: '🎯', short: 'Advanced Degen',  desc: 'Alpha, Shill, Ser, Fren, CT' },
-]
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -216,37 +208,6 @@ export default function GamePage() {
               </motion.div>
             )
           })}
-        </div>
-
-        <div style={{ marginTop: 56 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid rgba(0,255,148,0.15)' }}>
-            <span style={{ fontSize: 22 }}>📚</span>
-            <div>
-              <div className="font-syne font-black text-xl" style={{ color: '#00FF94' }}>Crypto Vocabulary</div>
-              <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>Learn the language of the blockchain. 5 questions per level.</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {VOCAB_LEVELS.map((lvl) => (
-              <motion.div
-                key={lvl.id}
-                onClick={() => { play('click'); navigate(`/vocab/${lvl.id}`) }}
-                className="relative rounded-xl border p-5 transition-all"
-                style={{ background: 'var(--bg-card)', borderColor: 'rgba(0,255,148,0.25)', cursor: 'pointer' }}
-                whileHover={{ scale: 1.02, borderColor: '#00FF94' }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[10px] px-2 py-0.5 rounded border" style={{ background: 'rgba(0,255,148,0.08)', color: '#00FF94', borderColor: 'rgba(0,255,148,0.3)' }}>
-                    VOL. {lvl.id}
-                  </span>
-                  <span className="text-xl">{lvl.emoji}</span>
-                </div>
-                <div className="font-mono text-[10px] mb-1" style={{ color: '#00FF94' }}>VOCAB · 5 QS</div>
-                <h3 className="font-syne font-bold text-base leading-tight text-white">{lvl.short}</h3>
-                <p className="font-mono text-xs text-gray-400">{lvl.desc}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
 
       </div>
