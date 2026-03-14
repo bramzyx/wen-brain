@@ -137,7 +137,7 @@ export default function Leaderboard({ limit = 3, full = false }) {
                         </span>
                       </div>
                       <div className="font-mono text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-                        {getLevelsCompleted(entry)}/10 levels completed
+                        {getLevelsCompleted(entry)}/16 levels completed
                       </div>
                     </div>
 

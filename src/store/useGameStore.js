@@ -96,6 +96,28 @@ export const useGameStore = create(
             return l
           }),
         }))
+
+        const xUserStr = localStorage.getItem('xUser')
+        if (!xUserStr) return
+        const xUser = JSON.parse(xUserStr)
+
+        const fresh = get()
+        const newXP = fresh.totalXP
+        const newLevelsCompleted = fresh.levels.filter((l) => l.completed).length + fresh.vocabLevels.filter((l) => l.completed).length
+
+        fetch('https://tubular-dieffenbachia-b254bc.netlify.app/.netlify/functions/leaderboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: xUser.username,
+            profile_picture: xUser.profilePicture || xUser.avatarUrl || null,
+            xp: newXP,
+            levels_completed: newLevelsCompleted,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => console.log('[WenBrain] Vocab leaderboard saved:', d))
+          .catch((e) => console.error('[WenBrain] Vocab leaderboard error:', e))
       },
 
       completeLevel: (levelId, correctAnswers) => {
@@ -122,7 +144,7 @@ export const useGameStore = create(
         // Read fresh state AFTER set() to get correct values
         const fresh = get()
         const newXP = fresh.totalXP
-        const newLevelsCompleted = fresh.levels.filter((l) => l.completed).length
+        const newLevelsCompleted = fresh.levels.filter((l) => l.completed).length + fresh.vocabLevels.filter((l) => l.completed).length
 
         console.log('[WenBrain] completeLevel posting:', { levelId, newXP, newLevelsCompleted })
 
