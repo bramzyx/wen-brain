@@ -68,11 +68,11 @@ function VisitorUpgradeModal({ onClose }) {
         <div className="text-3xl mb-4">🔒</div>
         <div className="font-mono text-xs mb-2" style={{ color: '#F7931A' }}>VISITOR LIMIT REACHED</div>
         <h2 className="font-syne font-black text-xl mb-3" style={{ color: 'var(--text-primary)' }}>
-          Login with X to unlock<br />all 10 levels
+          Login with X to unlock<br />all 16 levels
         </h2>
         <p className="font-mono text-xs mb-6" style={{ color: 'var(--text-secondary)' }}>
-          Levels 4-10 are locked in visitor mode.<br />
-          Login for full access + leaderboard. WAGMI.
+          Levels 4-10 and all Crypto Vocabulary are locked.<br />
+          Login with X for full access + leaderboard. WAGMI.
         </p>
         <button
           type="button" onClick={handleXLogin}
