@@ -328,6 +328,35 @@ export default function LandingPage() {
                 </div>
               </div>
               <LevelMap preview />
+
+              {/* Crypto Vocabulary Preview */}
+              <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(0,255,148,0.15)' }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span style={{ fontSize: 16 }}>📚</span>
+                  <span className="font-syne font-black text-sm" style={{ color: '#00FF94' }}>Crypto Vocabulary</span>
+                  <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>— 6 volumes</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    { id: 1, emoji: '🧠', short: 'The Basics',      color: '#00FF94' },
+                    { id: 2, emoji: '📉', short: 'Trading Talk',    color: '#FF3366' },
+                    { id: 3, emoji: '🐸', short: 'Community Slang', color: '#FFD700' },
+                    { id: 4, emoji: '⚙️', short: 'Technical Terms', color: '#627EEA' },
+                    { id: 5, emoji: '💎', short: 'Meme Culture',    color: '#9945FF' },
+                    { id: 6, emoji: '🎯', short: 'Advanced Degen',  color: '#F7931A' },
+                  ].map((lvl) => (
+                    <div key={lvl.id} className="flex items-center gap-2 p-2 rounded-lg"
+                      style={{ background: 'var(--bg-secondary)', border: `1px solid ${lvl.color}33` }}>
+                      <span style={{ fontSize: 14 }}>{lvl.emoji}</span>
+                      <div>
+                        <div className="font-mono text-[10px] font-bold" style={{ color: lvl.color }}>VOL. {lvl.id}</div>
+                        <div className="font-syne font-bold text-xs" style={{ color: 'var(--text-primary)' }}>{lvl.short}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </motion.div>
 
