@@ -226,6 +226,22 @@ export default function GamePage() {
               <div className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>Learn the language of the blockchain. 5 questions per level.</div>
             </div>
           </div>
+          {isVisitor && !xUser && (
+            <div className="flex items-center justify-between flex-wrap gap-3 px-4 py-3 rounded-xl mb-4"
+              style={{ background: 'rgba(247,147,26,0.08)', border: '1px solid rgba(247,147,26,0.25)' }}>
+              <span className="font-mono text-xs" style={{ color: '#F7931A' }}>
+                🔒 Crypto Vocabulary is for X users only. Login to unlock all 6 volumes.
+              </span>
+              <button
+                type="button"
+                onClick={async () => { try { await startXLogin() } catch (_) {} }}
+                className="font-mono text-xs px-3 py-1 rounded font-bold transition-all hover:opacity-80"
+                style={{ background: '#000', color: '#fff', border: '1px solid #333', whiteSpace: 'nowrap' }}
+              >
+                Login with X
+              </button>
+            </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {VOCAB_LEVELS.map((lvl) => {
               const vLevel = vocabLevels?.find((l) => l.id === lvl.id)
@@ -235,7 +251,12 @@ export default function GamePage() {
               return (
                 <motion.div
                   key={lvl.id}
-                  onClick={() => { if (!isUnlocked) return; play('click'); navigate(`/vocab/${lvl.id}`) }}
+                  onClick={() => {
+                    if (isVisitor && !xUser) { setShowUpgrade(true); return }
+                    if (!isUnlocked) return
+                    play('click')
+                    navigate(`/vocab/${lvl.id}`)
+                  }}
                   className="relative rounded-xl border p-5 transition-all"
                   style={{
                     background: isUnlocked ? 'var(--bg-card)' : 'rgba(0,0,0,0.4)',
