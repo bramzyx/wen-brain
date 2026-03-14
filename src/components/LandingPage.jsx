@@ -315,7 +315,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <div className="card-dark p-6">
+            <div className="card-dark p-6" onClick={() => { window.scrollTo(0, 0); navigate('/game') }} style={{ cursor: 'pointer' }}>
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-2xl">🗺️</span>
                 <div>
@@ -330,7 +330,7 @@ export default function LandingPage() {
               <LevelMap preview />
 
               {/* Crypto Vocabulary Preview */}
-              <div onClick={() => navigate('/game')} style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(0,255,148,0.15)', cursor: 'pointer' }}>
+              <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(0,255,148,0.15)' }}>
                 <div className="flex items-center gap-2 mb-3">
                   <span style={{ fontSize: 16 }}>📚</span>
                   <span className="font-syne font-black text-sm" style={{ color: '#00FF94' }}>Crypto Vocabulary</span>
