@@ -47,7 +47,7 @@ export default function Navbar() {
 
         {/* Middle: Clean Points Counter */}
         <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-          <span className="text-xs font-mono font-bold" style={{ color: 'var(--text-secondary)' }}>
+          <span className="text-[10px] sm:text-xs font-mono font-bold" style={{ color: 'var(--text-secondary)' }}>
             {totalXP || 0} <span style={{ color: '#F7931A' }}>PTS</span>
           </span>
         </div>
@@ -58,9 +58,9 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-2 py-1 rounded bg-[#111] border border-[#222]">
                 <img src={xUser.avatarUrl} className="w-5 h-5 rounded-full" alt="avatar" />
-                <span className="text-[10px] text-[#00FF94] font-mono">@{xUser.username}</span>
+                <span className="text-[10px] text-[#00FF94] font-mono hidden sm:inline">@{xUser.username}</span>
               </div>
-              <button onClick={handleLogout} className="text-[10px] text-gray-500 hover:text-white font-mono">Sign out</button>
+              <button onClick={handleLogout} className="text-[10px] text-gray-500 hover:text-white font-mono hidden sm:block">Sign out</button>
             </div>
           ) : (
             <button onClick={() => startXLogin()} className="bg-black text-white border border-[#333] px-3 py-1 rounded text-[10px] font-mono hover:bg-[#111]">
