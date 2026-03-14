@@ -115,24 +115,30 @@ export default function GamePage() {
         {showUpgrade && <VisitorUpgradeModal onClose={() => setShowUpgrade(false)} />}
       </AnimatePresence>
 
-      {isVisitor && !xUser && (
-        <div
-          className="sticky top-14 z-40 px-4 py-2"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', textAlign: 'center', flexWrap: 'wrap', background: 'rgba(8,11,17,0.85)', borderBottom: '1px solid rgba(247,147,26,0.25)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
-        >
-          <span className="font-mono text-xs" style={{ color: '#F7931A' }}>
-            VISITOR MODE — Levels 1-3 free. Login with X for full access.
+      <div
+        className="sticky top-14 z-40 px-4 py-2"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', textAlign: 'center', flexWrap: 'wrap', background: 'rgba(8,11,17,0.55)', borderBottom: '1px solid rgba(247,147,26,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+      >
+        {xUser ? (
+          <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
+            ✅ Full access — play all <span style={{ color: '#00FF94' }}>16 levels</span> + Crypto Vocabulary. WAGMI ser.
           </span>
-          <button
-            type="button"
-            onClick={async () => { try { await startXLogin() } catch (_) {} }}
-            className="font-mono text-xs px-3 py-1 rounded font-bold transition-all hover:opacity-80"
-            style={{ background: '#000', color: '#fff', border: '1px solid #333' }}
-          >
-            Login with X
-          </button>
-        </div>
-      )}
+        ) : (
+          <>
+            <span className="font-mono text-xs" style={{ color: '#F7931A' }}>
+              🔒 Visitors can only play levels 1–3. Login with X for all 16 levels + leaderboard.
+            </span>
+            <button
+              type="button"
+              onClick={async () => { try { await startXLogin() } catch (_) {} }}
+              className="font-mono text-xs px-3 py-1 rounded font-bold transition-all hover:opacity-80"
+              style={{ background: '#000', color: '#fff', border: '1px solid #333', whiteSpace: 'nowrap' }}
+            >
+              Login with X
+            </button>
+          </>
+        )}
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-24">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 text-center sm:text-left">
