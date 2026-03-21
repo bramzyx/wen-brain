@@ -324,20 +324,21 @@ export default function LandingPage() {
 
             {/* CA + Copy button */}
             <div
-              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl"
+              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl w-full"
               style={{
                 background: 'rgba(247,147,26,0.06)',
                 border: '1px solid rgba(247,147,26,0.25)',
-                maxWidth: '100%',
+                maxWidth: 600,
               }}
             >
               <span
-                className="font-mono text-xs"
+                className="font-mono text-xs sm:text-sm flex-1 min-w-0"
                 style={{
                   color: '#F7931A',
                   letterSpacing: 1,
-                  wordBreak: 'break-all',
-                  textAlign: 'left',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
                 id="ca-address"
               >
@@ -351,7 +352,7 @@ export default function LandingPage() {
                   if (btn) { btn.innerText = 'Copied!'; setTimeout(() => { btn.innerText = 'Copy' }, 2000) }
                 }}
                 id="ca-copy-btn"
-                className="font-mono text-xs px-3 py-1 rounded-lg flex-shrink-0 transition-all hover:opacity-80"
+                className="font-mono text-xs px-4 py-2 rounded-lg flex-shrink-0 transition-all hover:opacity-80"
                 style={{
                   background: '#F7931A',
                   color: '#000',
@@ -359,6 +360,7 @@ export default function LandingPage() {
                   border: 'none',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  fontSize: '0.75rem',
                 }}
               >
                 Copy
