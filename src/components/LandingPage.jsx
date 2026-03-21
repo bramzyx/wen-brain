@@ -293,6 +293,78 @@ export default function LandingPage() {
               </div>
             </div>
           </motion.div>
+
+          {/* $WenBrain Token Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            style={{ marginTop: 32, textAlign: 'center' }}
+          >
+            {/* Shining label */}
+            <div style={{ marginBottom: 8 }}>
+              <span
+                className="font-mono text-xs font-bold"
+                style={{
+                  color: '#F7931A',
+                  letterSpacing: 4,
+                  textTransform: 'uppercase',
+                  textShadow: '0 0 20px #F7931A99, 0 0 40px #F7931A44',
+                  animation: 'pulse 2s ease-in-out infinite',
+                }}
+              >
+                $WENBRAIN
+              </span>
+            </div>
+
+            {/* Short description */}
+            <p className="font-mono text-xs mb-4" style={{ color: 'var(--text-secondary)', letterSpacing: 1 }}>
+              the token for degens who actually learned something
+            </p>
+
+            {/* CA + Copy button */}
+            <div
+              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{
+                background: 'rgba(247,147,26,0.06)',
+                border: '1px solid rgba(247,147,26,0.25)',
+                maxWidth: '100%',
+              }}
+            >
+              <span
+                className="font-mono text-xs"
+                style={{
+                  color: '#F7931A',
+                  letterSpacing: 1,
+                  wordBreak: 'break-all',
+                  textAlign: 'left',
+                }}
+                id="ca-address"
+              >
+                00000000000000000000000000000000000000000000
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText('00000000000000000000000000000000000000000000')
+                  const btn = document.getElementById('ca-copy-btn')
+                  if (btn) { btn.innerText = 'Copied!'; setTimeout(() => { btn.innerText = 'Copy' }, 2000) }
+                }}
+                id="ca-copy-btn"
+                className="font-mono text-xs px-3 py-1 rounded-lg flex-shrink-0 transition-all hover:opacity-80"
+                style={{
+                  background: '#F7931A',
+                  color: '#000',
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Copy
+              </button>
+            </div>
+          </motion.div>
         </div>
 
         <motion.div
