@@ -322,46 +322,42 @@ export default function LandingPage() {
               the token for degens who actually learned something
             </p>
 
-            {/* CA + Copy button */}
-            <div
-              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl w-full"
-              style={{
-                background: 'rgba(247,147,26,0.06)',
-                border: '1px solid rgba(247,147,26,0.25)',
-                maxWidth: 600,
-              }}
+            {/* Desktop — big and full */}
+            <div className="hidden sm:inline-flex items-center gap-3 px-5 py-4 rounded-xl"
+              style={{ background: 'rgba(247,147,26,0.06)', border: '1px solid rgba(247,147,26,0.25)' }}
             >
-              <span
-                className="font-mono text-xs sm:text-sm flex-1 min-w-0"
-                style={{
-                  color: '#F7931A',
-                  letterSpacing: 1,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-                id="ca-address"
-              >
+              <span className="font-mono" style={{ color: '#F7931A', fontSize: '1rem', letterSpacing: 2 }}
+                id="ca-address">
                 00000000000000000000000000000000000000000000
               </span>
-              <button
-                type="button"
+              <button type="button" id="ca-copy-btn"
                 onClick={() => {
                   navigator.clipboard.writeText('00000000000000000000000000000000000000000000')
                   const btn = document.getElementById('ca-copy-btn')
                   if (btn) { btn.innerText = 'Copied!'; setTimeout(() => { btn.innerText = 'Copy' }, 2000) }
                 }}
-                id="ca-copy-btn"
-                className="font-mono text-xs px-4 py-2 rounded-lg flex-shrink-0 transition-all hover:opacity-80"
-                style={{
-                  background: '#F7931A',
-                  color: '#000',
-                  fontWeight: 700,
-                  border: 'none',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  fontSize: '0.75rem',
+                className="font-mono font-bold px-4 py-2 rounded-lg transition-all hover:opacity-80"
+                style={{ background: '#F7931A', color: '#000', border: 'none', cursor: 'pointer', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
+              >
+                Copy
+              </button>
+            </div>
+
+            {/* Mobile — smaller font so full CA fits in one line */}
+            <div className="sm:hidden inline-flex items-center gap-2 px-3 py-3 rounded-xl w-full max-w-sm"
+              style={{ background: 'rgba(247,147,26,0.06)', border: '1px solid rgba(247,147,26,0.25)' }}
+            >
+              <span className="font-mono flex-1" style={{ color: '#F7931A', fontSize: '0.55rem', letterSpacing: 0.5, whiteSpace: 'nowrap' }}>
+                00000000000000000000000000000000000000000000
+              </span>
+              <button type="button" id="ca-copy-btn-mobile"
+                onClick={() => {
+                  navigator.clipboard.writeText('00000000000000000000000000000000000000000000')
+                  const btn = document.getElementById('ca-copy-btn-mobile')
+                  if (btn) { btn.innerText = 'Copied!'; setTimeout(() => { btn.innerText = 'Copy' }, 2000) }
                 }}
+                className="font-mono font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-80 flex-shrink-0"
+                style={{ background: '#F7931A', color: '#000', border: 'none', cursor: 'pointer', fontSize: '0.65rem', whiteSpace: 'nowrap' }}
               >
                 Copy
               </button>
