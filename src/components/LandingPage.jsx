@@ -304,7 +304,7 @@ export default function LandingPage() {
             {/* Shining label */}
             <div style={{ marginBottom: 8 }}>
               <span
-                className="font-mono text-xs font-bold"
+                className="font-mono text-xs sm:text-lg font-bold"
                 style={{
                   color: '#F7931A',
                   letterSpacing: 4,
@@ -318,7 +318,7 @@ export default function LandingPage() {
             </div>
 
             {/* Short description */}
-            <p className="font-mono text-xs mb-4" style={{ color: 'var(--text-secondary)', letterSpacing: 1 }}>
+            <p className="font-mono text-xs sm:text-base mb-4" style={{ color: 'var(--text-secondary)', letterSpacing: 1 }}>
               the token for degens who actually learned something
             </p>
 
